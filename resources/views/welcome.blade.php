@@ -82,7 +82,7 @@
     </header>
     <div class="hero">
         <h1>Learn Your favorite language From Online</h1>
-        <button>Browse Our Courses</button>
+        <button>Browse Languages</button>
     </div>
 </body>
 </html>

@@ -34,7 +34,7 @@
                         <div class="mt-2">
                             <textarea name="course_description" id="course_description" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" placeholder="Write a brief description of the course"></textarea>
                         </div>
-                        <p class="mt-3 text-sm/6 text-gray-600">Provide a detailed description of your language.</p>
+                        <p class="mt-3 text-sm/6 text-gray-600">Provide a detailed description of the language course.</p>
                     </div>
                 </div>
             </div>
