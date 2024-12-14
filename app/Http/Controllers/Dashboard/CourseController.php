@@ -8,9 +8,16 @@ use App\Http\Controllers\Controller;
 
 class CourseController extends Controller
 {
-    public function create()
+     public function index()
+     {
+          $data['activeMenu'] = 'courses';
+          $data['courses'] =  Course::all(); // Get all courses from the database
+          return view('dashboard.courses.courseList')->with($data); // Pass courses to the index view
+     }
+
+
+     public function create()
     {
-       
         return view('dashboard.courses.create');
     }
 
@@ -28,9 +35,8 @@ class CourseController extends Controller
         $course->title = $validatedData['course_name'];
         $course->description = $validatedData['course_description'];
         $course->save();
-
   
-        return redirect()->back()->with('success', 'Course created successfully!');
+        return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully!');
    
     }
 
@@ -79,11 +85,5 @@ class CourseController extends Controller
 
         return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully!');
     }
-    public function index()
-    {
-        $courses = Course::all(); // Get all courses from the database
-        return view('dashboard.courses.courseList', compact('courses')); // Pass courses to the index view
-    }
-
 
 }

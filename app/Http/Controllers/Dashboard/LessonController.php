@@ -9,7 +9,14 @@ use Illuminate\Support\Facades\Storage;
 
 class LessonController extends Controller
 {
-    public function create()
+     public function index()
+     {
+          $data['activeMenu'] = 'lessons';
+          $data['lessons'] =  Lesson::all();
+          return view('dashboard.lessons.lessonList')->with($data); // Pass lessons to the index view
+     }
+
+     public function create()
     {
         // Fetch all courses to display in the dropdown
         $courses = Course::all();
@@ -121,11 +128,6 @@ class LessonController extends Controller
         $lesson->delete();
 
         return redirect()->route('dashboard.lessons.index')->with('success', 'Lesson deleted successfully');
-    }
-    public function index()
-    {
-        $lessons = Lesson::all(); // Get all lessons from the database
-        return view('dashboard.lessons.lessonList', compact('lessons')); // Pass lessons to the index view
     }
 
 

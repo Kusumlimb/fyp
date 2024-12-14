@@ -1,9 +1,8 @@
 @extends('layouts.dashboard.dashboard')
 
 @section('content')
-    <div class="space-y-10">
         <div class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl">
-            <div class="px-4 py-5 sm:px-6 border-b border-gray-900/10">
+            <div class="px-4 py-4 sm:px-8 border-b border-gray-900/10">
                 <div class="-mt-4 -ml-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
                     <div class="mt-4 ml-4">
                         <h3 class="text-base font-semibold text-gray-900">Create Course</h3>
@@ -15,7 +14,7 @@
                     </div>
                 </div>
             </div>
-            <form class="px-4 py-5 sm:px-6" enctype="multipart/form-data" method="POST" action="{{route('dashboard.courses.store')}}" id="create-course-form">
+            <form class="px-4 py-4 sm:px-8" enctype="multipart/form-data" method="POST" action="{{route('dashboard.courses.store')}}" id="create-course-form">
                 @csrf
                     <div class="mb-4">
                         <label for="course_name" class="block text-sm/6 font-medium text-gray-900">Course Name</label>
@@ -36,15 +35,10 @@
                         </div>
                     </div>
             </form>
-            <div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-6">
+            <div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
                 <button form="create-course-form" type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
             </div>
         </div>
-
-    </div>
-
-
-
 
     {{-- <div class="container"> --}}
 {{--     <h1>Create language course</h1> --}}

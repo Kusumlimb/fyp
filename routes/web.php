@@ -12,9 +12,33 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'verified'])->group(function(){
+     Route::prefix('dashboard')->as('dashboard.')->group(function(){
+          Route::get('/', function () {
+               return view('dashboard');
+          })->name('index');
+
+          Route::prefix('courses')->as('courses.')->group(function(){
+               Route::get('/', [CourseController::class, 'index'])->name('index');
+               Route::get('create', [CourseController::class, 'create'])->name('create');
+               Route::post('/', [CourseController::class, 'store'])->name('store');
+               Route::get('{course}/edit', [CourseController::class, 'edit'])->name('edit');
+               Route::put('{course}', [CourseController::class, 'update'])->name('update');
+               Route::delete('{course}', [CourseController::class, 'destroy'])->name('destroy');
+          });
+
+          Route::prefix('lessons')->as('lessons.')->group(function () {
+               Route::get('/', [LessonController::class, 'index'])->name('index');
+               Route::get('create', [LessonController::class, 'create'])->name('create');
+               Route::post('/', [LessonController::class, 'store'])->name('store');
+               Route::get('{lesson}/edit', [LessonController::class, 'edit'])->name('edit');
+               Route::put('{lesson}', [LessonController::class, 'update'])->name('update');
+               Route::delete('{lesson}', [LessonController::class, 'destroy'])->name('destroy');
+          });
+     });
+});
+
 
 
 Route::middleware('auth')->group(function () {
@@ -23,31 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
-Route::prefix('dashboard/courses')->middleware(['auth'])->as('dashboard.')->group(function(){
-    Route::get('create', [CourseController::class, 'create'])->name('courses.create');
-    Route::post('store', [CourseController::class, 'store'])->name('courses.store');
-    Route::get('/', [CourseController::class, 'index'])->name('courses.index');
-    Route::get('{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
-    Route::put('{course}', [CourseController::class, 'update'])->name('courses.update');
-    Route::delete('{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
-});
-
-
-Route::prefix('dashboard/lessons')->middleware(['auth'])->as('dashboard.')->group(function () {
-    Route::get('create', [LessonController::class, 'create'])->name('lessons.create');
-    Route::post('store', [LessonController::class, 'store'])->name('lessons.store');
-    Route::get('/', [LessonController::class, 'index'])->name('lessons.index');
-    // Add edit route to show edit form
-    Route::get('{lesson}/edit', [LessonController::class, 'edit'])->name('lessons.edit');
-
-    // Add update route to handle the actual update of the lesson
-    Route::put('{lesson}', [LessonController::class, 'update'])->name('lessons.update');
-
-    // Add delete route for lesson deletion
-    Route::delete('{lesson}', [LessonController::class, 'destroy'])->name('lessons.destroy');
-});
 
 // Route::middleware(['auth','admin'])->group(function(){
 //     Route::resource('admin/users',RegisteredUserController::class);
