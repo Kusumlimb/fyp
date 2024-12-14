@@ -1,5 +1,4 @@
 import './bootstrap';
-import './vendors/jQuery-3.7.1.js';
 import Alpine from 'alpinejs';
 import.meta.glob([
     '../images/**'

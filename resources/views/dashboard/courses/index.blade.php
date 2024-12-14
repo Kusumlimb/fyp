@@ -1,4 +1,5 @@
 @extends('layouts.dashboard.dashboard')
+@section('title', 'Courses')
 @section('content')
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
@@ -24,13 +25,13 @@
                         @forelse($courses as $course)
                         <tr>
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{$course->title}}</td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$course->description}}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{Str::limit($course->description, 30)}}</td>
                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-sm font-medium sm:pr-6">
-                                <a href="{{route('dashboard.courses.edit', $course->id)}}" class="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 inline-block">Edit<span class="sr-only">{{$course->name}}</span></a>
+                                <a href="{{route('dashboard.courses.edit', $course->id)}}" class="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 inline-block">Edit<span class="sr-only">{{$course->title}}</span></a>
                                  <form action="{{ route('dashboard.courses.destroy', $course->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this course?');">
                                      @method('DELETE')
                                      @csrf
-                                     <button type="submit" class="rounded-md bg-red-50 px-2.5 py-1.5 text-sm font-semibold text-red-600 shadow-sm hover:bg-indigo-100">Delete</button>
+                                     <button type="submit" class="rounded-md bg-red-50 px-2.5 py-1.5 text-sm font-semibold text-red-600 shadow-sm hover:bg-red-100">Delete</button>
                                  </form>
                             </td>
                         </tr>
@@ -42,6 +43,10 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="mt-3">
+                {{$courses->links()}}
+                </div>
+
             </div>
         </div>
     </div>

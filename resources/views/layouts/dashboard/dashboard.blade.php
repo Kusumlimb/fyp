@@ -100,8 +100,11 @@
                                 x-transition:leave-end="transform opacity-0 scale-95"
                                 class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                             <!-- Active: "bg-gray-50 outline-none", Not Active: "" -->
-                            <a href="#" class="block px-3 py-1 text-sm/6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">Your profile</a>
-                            <a href="#" class="block px-3 py-1 text-sm/6 text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-1">Sign out</a>
+                            <a href="#" class="block px-3 py-1 text-sm/6 text-gray-900" role="menuitem" tabindex="-1">Your profile</a>
+                            <form method="post" action="{{route('logout')}}">
+                                @csrf
+                                <button type="submit" class="block px-3 py-1 text-sm/6 text-gray-900" role="menuitem" tabindex="-1">Sign out</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -114,6 +117,8 @@
             </div>
         </main>
     </div>
+    <script src="{{asset('js/vendors/jQuery-3.7.1.js')}}"></script>
+    <script src="{{asset('js/vendors/jquery.repeater.js')}}"></script>
     @stack('scripts')
 </body>
 </html>

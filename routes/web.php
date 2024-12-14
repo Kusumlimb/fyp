@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\LessonController;
+use App\Http\Controllers\Dashboard\QuizController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
@@ -35,6 +36,16 @@ Route::middleware(['auth', 'verified'])->group(function(){
                Route::get('{lesson}/edit', [LessonController::class, 'edit'])->name('edit');
                Route::put('{lesson}', [LessonController::class, 'update'])->name('update');
                Route::delete('{lesson}', [LessonController::class, 'destroy'])->name('destroy');
+          });
+
+          Route::prefix('quizzes')->as('quiz.')->group(function(){
+               Route::get('/', [QuizController::class, 'index'])->name('index');
+               Route::get('create', [QuizController::class, 'create'])->name('create');
+               Route::post('/', [QuizController::class, 'store'])->name('store');
+               Route::get('{quiz}/edit', [QuizController::class, 'edit'])->name('edit');
+               Route::put('{quiz}', [QuizController::class, 'update'])->name('update');
+               Route::delete('{quiz}', [QuizController::class, 'destroy'])->name('destroy');
+
           });
      });
 });

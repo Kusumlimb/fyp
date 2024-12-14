@@ -5,20 +5,23 @@ use App\Models\Course;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
 {
      public function index()
      {
           $data['activeMenu'] = 'courses';
-          $data['courses'] =  Course::all(); // Get all courses from the database
-          return view('dashboard.courses.courseList')->with($data); // Pass courses to the index view
+          $data['courses'] =  Course::query()->paginate(5); // Get all courses from the database
+          return view('dashboard.courses.index')->with($data); // Pass courses to the index view
      }
 
 
      public function create()
     {
-        return view('dashboard.courses.create');
+        $data['activeMenu'] = 'courses';
+        $data['course'] = new Course();
+        return view('dashboard.courses.create')->with($data);
     }
 
 
@@ -26,7 +29,7 @@ class CourseController extends Controller
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
-             'course_name'        => 'required|string|max:255',
+             'course_name'        => 'required|string|unique|max:255',
              'course_description' => 'required|string|max:1000',
         ]);
 
@@ -47,7 +50,9 @@ class CourseController extends Controller
         //     abort(403); // Unauthorized
         // }
 
-        return view('dashboard.courses.edit', compact('course'));
+        $data['activeMenu'] = 'courses';
+        $data['course'] = $course;
+        return view('dashboard.courses.edit')->with($data);
     }
 
     // Update an existing course
@@ -57,11 +62,14 @@ class CourseController extends Controller
         // if ($course->user_id !== auth()->id()) {
         //     abort(403); // Unauthorized
         // }
-
-        // Validate the incoming request data
         $validatedData = $request->validate([
-            'course_name' => 'required|string|max:255',
-            'course_description' => 'required|string|max:1000',
+             'course_name'        =>  [
+                  'required',
+                  'string',
+                  'max:255',
+                  Rule::unique('courses')->ignore($course->id), // Ensure uniqueness while ignoring the current course
+             ],
+             'course_description' => 'required|string|max:1000',
         ]);
 
         // Update the course
