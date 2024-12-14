@@ -11,7 +11,7 @@ class CourseController extends Controller
     public function create()
     {
        
-        return view('dashboard.courses.create');
+        return view('layouts.dashboard');
     }
 
 

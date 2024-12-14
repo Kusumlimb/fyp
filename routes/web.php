@@ -29,13 +29,8 @@ Route::prefix('dashboard/courses')->middleware(['auth'])->as('dashboard.')->grou
     Route::get('create', [CourseController::class, 'create'])->name('courses.create');
     Route::post('store', [CourseController::class, 'store'])->name('courses.store');
     Route::get('/', [CourseController::class, 'index'])->name('courses.index');
-    // Add edit route to show edit form
     Route::get('{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
-
-    // Add update route to handle the actual update of the course
     Route::put('{course}', [CourseController::class, 'update'])->name('courses.update');
-
-    // Add delete route for course deletion
     Route::delete('{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
 });
 
