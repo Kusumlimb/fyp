@@ -11,22 +11,18 @@ class CourseController extends Controller
     public function create()
     {
        
-        return view('layouts.dashboard');
+        return view('dashboard.courses.create');
     }
 
 
     public function store(Request $request)
     {
-   
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'course_name' => 'required|string|max:255',
-            'course_description' => 'required|string|max:1000',
+             'course_name'        => 'required|string|max:255',
+             'course_description' => 'required|string|max:1000',
         ]);
 
-    
-
-    
         // Create a new course using the validated data
         $course = new Course();
         $course->title = $validatedData['course_name'];
