@@ -14,8 +14,7 @@
                 </div>
             </div>
         </div>
-        <form class="px-4 py-4 sm:px-8" enctype="multipart/form-data" method="POST" action="{{route('dashboard.quiz.update', $quiz->id)}}" id="update-course-quiz-form">
-            @method('PUT')
+        <form class="px-4 py-4 sm:px-8" enctype="multipart/form-data" method="POST" action="{{route('dashboard.quiz.store', $course)}}" id="create-course-quiz-form">
             @csrf
             <div>
                 <div class="flex flex-col space-y-4">
@@ -23,7 +22,7 @@
                         <div class="mb-4">
                             <label for="quiz_title" class="block text-sm font-medium text-gray-700">Quiz Title</label>
                             <input
-                                    value="{{old('quiz_title', $quiz->title)}}"
+                                    value="{{old('quiz_title')}}"
                                     type="text" id="quiz_title"  name="quiz_title" placeholder="Quiz title"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
                             >
@@ -35,29 +34,24 @@
                         </div>
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-700">Options</label>
-                            @foreach($quiz->options  as $option)
+                            @foreach(range(1, 4) as $index)
                                 <div class="mt-2 flex items-center gap-2">
                                     <input
                                             type="radio"
                                             name="correct_option"
-                                            {{$option->is_correct ? 'checked': ''}}
-                                            value="{{ $option->id }}"
+                                            value="{{ $index }}"
+                                            {{ old('correct_option') == $index ? 'checked' : '' }}
                                             class="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
                                     >
                                     <input
-                                            type="hidden"
-                                            name="options[{{$option->id}}][option_id]"
-                                            value="{{$option->id}}"
-                                    >
-                                    <input
                                             type="text"
-                                            name="options[{{$option->id}}][option_text]"
-                                            value="{{ old('options.' . $option->id . '.option_text', $option->option_text) }}"
+                                            name="options[{{ $index }}][option_text]"
+                                            value="{{ old('options.' . $index . '.option_text') }}"
                                             placeholder="Option"
                                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
                                     >
                                 </div>
-                                @error('options.' . $option->id . '.option_text')
+                                @error('options.' . $index . '.option_text')
                                 <span class="block text-xs text-red-600 mt-1">{{ $message }}</span>
                                 @enderror
                             @endforeach
@@ -67,7 +61,7 @@
             </div>
         </form>
         <div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-            <button form="update-course-quiz-form" type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Update</button>
+            <button form="create-course-quiz-form" type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
         </div>
     </div>
 @endsection

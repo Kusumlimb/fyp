@@ -28,7 +28,8 @@
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{Str::limit($course->description, 30)}}</td>
                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-sm font-medium sm:pr-6">
                                 <a href="{{route('dashboard.courses.edit', $course->id)}}" class="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 inline-block">Edit<span class="sr-only">{{$course->title}}</span></a>
-                                 <form action="{{ route('dashboard.courses.destroy', $course->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                                <a href="{{route('dashboard.quiz.create', $course->id)}}" class="rounded-md bg-green-50 px-2.5 py-1.5 text-sm font-semibold text-green-600 shadow-sm hover:bg-green-100 inline-block">Add Quiz<span class="sr-only">{{$course->title}}</span></a>
+                                <form action="{{ route('dashboard.courses.destroy', $course->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this course?');">
                                      @method('DELETE')
                                      @csrf
                                      <button type="submit" class="rounded-md bg-red-50 px-2.5 py-1.5 text-sm font-semibold text-red-600 shadow-sm hover:bg-red-100">Delete</button>

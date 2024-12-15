@@ -40,8 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function(){
 
           Route::prefix('quizzes')->as('quiz.')->group(function(){
                Route::get('/', [QuizController::class, 'index'])->name('index');
-               Route::get('create', [QuizController::class, 'create'])->name('create');
-               Route::post('/', [QuizController::class, 'store'])->name('store');
+               Route::get('create/course/{course}', [QuizController::class, 'create'])->name('create');
+               Route::post('/course/{course}', [QuizController::class, 'store'])->name('store');
                Route::get('{quiz}/edit', [QuizController::class, 'edit'])->name('edit');
                Route::put('{quiz}', [QuizController::class, 'update'])->name('update');
                Route::delete('{quiz}', [QuizController::class, 'destroy'])->name('destroy');
