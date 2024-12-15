@@ -5,11 +5,14 @@
         <div class="px-4 py-4 sm:px-8 border-b border-gray-900/10">
             <div class="-mt-4 -ml-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
                 <div class="mt-4 ml-4">
-                    <h3 class="text-base font-semibold text-gray-900">Edit Quiz</h3>
+                    <h3 class="text-base font-semibold text-gray-900">Create Quiz</h3>
                 </div>
                 <div class="mt-4 ml-4 flex shrink-0">
-                    <a href="{{route('dashboard.quiz.index')}}" class="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50">
+                    <a href="{{route('dashboard.courses.index')}}" class="relative inline-flex items-center rounded-md mr-2 bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50">
                         <span>Back</span>
+                    </a>
+                    <a href="{{route('dashboard.quiz.index')}}" class="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50">
+                        <span>All Quizzes</span>
                     </a>
                 </div>
             </div>
