@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Option;
 use App\Models\Quiz;
-use App\Rules\Dashboard\CorrectOptionRule;
+use App\Rules\Dashboard\UniqueOptionRule;
 use Illuminate\Http\Request;
 
 class QuizController extends Controller
@@ -32,7 +32,7 @@ class QuizController extends Controller
           $request->validate([
                'quiz_title'            => ['required', 'string', 'max:255'],
                'options'               => ['required', 'array', 'size:4'],
-               'options.*.option_text' => ['required', 'string', 'max:255'],
+               'options.*.option_text' => ['required', 'string', 'max:255', 'distinct'],
                'correct_option'        => ['required', 'in:1,2,3,4']
           ], [], [
                'options.*.option_text' => 'Option text',
@@ -68,7 +68,7 @@ class QuizController extends Controller
                'quiz_title'            => ['required', 'string', 'max:255'],
                'options'               => ['required', 'array', 'size:4'],
                'options.*.option_id'   => ['required', 'exists:options,id'],
-               'options.*.option_text' => ['required', 'string', 'max:255'],
+               'options.*.option_text' => ['required', 'string', 'max:255', 'distinct'],
                'correct_option'        => ['required', 'exists:options,id']
           ], [], [
                'options.*.option_text' => 'Option text',
@@ -89,7 +89,8 @@ class QuizController extends Controller
 
      }
 
-     public function destroy(Course $course){
-
+     public function destroy(Quiz $quiz){
+          $quiz->delete();
+          return redirect()->route('dashboard.quiz.index')->with('success', 'Quiz deleted successfully!');
      }
 }
