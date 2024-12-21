@@ -1,34 +1,37 @@
 <?php
 
 namespace App\Http\Controllers\Dashboard;
+
 use App\Models\Course;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class LessonController extends Controller
 {
-     public function index()
-     {
-          $data['activeMenu'] = 'lessons';
-          $data['lessons'] =  Lesson::all();
-          return view('dashboard.lessons.lessonList')->with($data); // Pass lessons to the index view
-     }
+    // Display all lessons
+    public function index()
+    {
+        $data['activeMenu'] = 'lessons';
+        $data['lessons'] = Lesson::paginate(5); // Pagination for lessons
+        return view('dashboard.lessons.index')->with($data); // Pass lessons to the index view
+    }
 
-     public function create()
+    // Show the form to create a new lesson
+    public function create()
     {
         // Fetch all courses to display in the dropdown
         $courses = Course::all();
-
-        // Return the view with the list of all courses
-        return view('dashboard.lessons.create', compact('courses'));
+        $data['activeMenu'] = 'lessons';
+        return view('dashboard.lessons.create', compact('courses'))->with($data);
     }
 
-
+    // Store a new lesson
     public function store(Request $request)
     {
-        // Validate the request, including the video upload
+        // Validate the incoming request data
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -36,12 +39,12 @@ class LessonController extends Controller
             'course_id' => 'required|exists:courses,id',
         ]);
 
-        // Handle the file upload
+        // Handle the video file upload
         if ($request->hasFile('video')) {
             $videoPath = $request->file('video')->store('videos', 'public'); // Store the video in the 'videos' folder
         }
 
-        // Create the lesson with the provided data
+        // Create the lesson using the validated data
         Lesson::create([
             'title' => $validated['title'],
             'description' => $validated['description'],
@@ -49,70 +52,51 @@ class LessonController extends Controller
             'course_id' => $validated['course_id'],
         ]);
 
-        return redirect()->route('dashboard.lessons.create')->with('success', 'Lesson created successfully');
+        return redirect()->route('dashboard.lessons.index')->with('success', 'Lesson created successfully');
     }
 
+    // Show the form to edit a specific lesson
     public function edit(Lesson $lesson)
     {
-        // // Ensure the user is authorized to edit this lesson
-        // if ($lesson->course->user_id !== auth()->id()) {
-        //     abort(403); // Unauthorized
-        // }
-
         // Fetch all courses to populate the course dropdown
         $courses = Course::all();
-
-        // Return the view with lesson and courses data
-        return view('dashboard.lessons.edit', compact('lesson', 'courses'));
+        $data['activeMenu'] = 'lessons';
+        return view('dashboard.lessons.edit', compact('lesson', 'courses'))->with($data);
     }
 
-    // Update a specific lesson
+    // Update an existing lesson
     public function update(Request $request, Lesson $lesson)
     {
-        // dd($request->all());
-        // Ensure the user is authorized to update this lesson
-        // if ($lesson->course->user_id !== auth()->id()) {
-        //     abort(403); // Unauthorized
-        // }
-
-        // Validate the request, including optional video upload
+        // Validate the incoming request data, including optional video upload
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'video' => 'required|mimes:mp4,mov,avi,mkv,flv|max:10000',
+            'video' => 'nullable|mimes:mp4,mov,avi,mkv,flv|max:10000', // Optional video upload
             'course_id' => 'required|exists:courses,id',
         ]);
 
         // Handle file upload if a new video is provided
         if ($request->hasFile('video')) {
-
-        
             // Delete the old video if it exists
             if ($lesson->video_url && file_exists(public_path('storage/'.$lesson->video_url))) {
-            
-                unlink(public_path('storage/'.$lesson->video_url));  // Delete old video
+                unlink(public_path('storage/'.$lesson->video_url));  // Delete the old video
             }
-           
 
-        // Store the new video
-           
-       
-            $videoPath = Storage::put('videos', $request->file('video'));
-         
+            // Store the new video
+            $videoPath = $request->file('video')->store('videos', 'public');
         } else {
-        // Keep the old video if no new file is uploaded
-        $videoPath = $lesson->video_url;  // This assumes you have a 'video_path' column
+            // If no new video, keep the old one
+            $videoPath = $lesson->video_url;
         }
 
-      
-
-    // Update the lesson with the new data
+        // Update the lesson with the new data
         $lesson->update([
-        'title' => $validated['title'],
-        'description' => $validated['description'],
-        'course_id' => $validated['course_id'],
-        'video_url' => $videoPath,  // Store the video path
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'course_id' => $validated['course_id'],
+            'video_url' => $videoPath,  // Store the video path in the database
         ]);
+
         return redirect()->route('dashboard.lessons.index')->with('success', 'Lesson updated successfully');
     }
 
@@ -120,15 +104,18 @@ class LessonController extends Controller
     public function destroy(Lesson $lesson)
     {
         // Ensure the user is authorized to delete this lesson
-        // if ($lesson->course->user_id !== auth()->id()) {
+        // Uncomment the lines below if you want to enforce ownership checks
+        // if ($lesson->user_id !== auth()->id()) {
         //     abort(403); // Unauthorized
         // }
 
         // Delete the lesson
+        if ($lesson->video_url && file_exists(public_path('storage/'.$lesson->video_url))) {
+            unlink(public_path('storage/'.$lesson->video_url));  // Delete the associated video
+        }
+
         $lesson->delete();
 
         return redirect()->route('dashboard.lessons.index')->with('success', 'Lesson deleted successfully');
     }
-
-
 }
