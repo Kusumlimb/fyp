@@ -13,8 +13,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/about/language', function () {
+     return view('about.language');
+ });
 
-Route::middleware(['auth', 'verified'])->group(function(){
+ Route::get('/about/blog', function () {
+     return view('about.blog');
+ });
+ 
+ Route::get('/about/contact', function () {
+     return view('about.contact');
+ });
+ 
+ Route::get('/about/languages/spanish', function () {
+     return view('about.languages.spanish');
+ })->name('languages.spanish');
+ 
+Route::middleware(['auth', 'verified', 'role:teacher'])->group(function(){
      Route::prefix('dashboard')->as('dashboard.')->group(function(){
           Route::get('/', function () {
                return view('dashboard');

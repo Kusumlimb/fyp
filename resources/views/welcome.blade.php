@@ -4,14 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Language learning platform</title>
-    <!-- Add Google Fonts -->
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Add CSS -->
-    <style>
+    
+</head>
+<body>
+    <header>
+    <div class="logo">
+    <a href="/">
+        <img src="/images/logo.png" alt="logo" style="height: 50px;">
+    </a>
+</div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="/about/language">Languages</a></li>
+                <li><a href="/about/blog">Blog</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <div>
+            <a href="/register" style="margin-right: 15px; color: white;">Register</a>
+            <a href="/login" style="color: white;">Log In</a>
+        </div>
+    </header>
+    <div class="hero">
+        <h1>Learn Your favorite language From Online</h1>
+        <button>Browse Languages</button>
+    </div>
+</body>
+</html>
+
+<style>
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            background: #084f9c;
             color: white;
             text-align: center;
         }
@@ -59,30 +87,3 @@
             background-color: #028a3d;
         }
     </style>
-</head>
-<body>
-    <header>
-    <div class="logo">
-    <a href="/">
-        <img src="/images/logo.png" alt="logo" style="height: 50px;">
-    </a>
-</div>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Languages</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-        <div>
-            <a href="/register" style="margin-right: 15px; color: white;">Register</a>
-            <a href="/login" style="color: white;">Log In</a>
-        </div>
-    </header>
-    <div class="hero">
-        <h1>Learn Your favorite language From Online</h1>
-        <button>Browse Languages</button>
-    </div>
-</body>
-</html>
