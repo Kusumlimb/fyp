@@ -1,4 +1,3 @@
-dd('hit');
 @extends('layouts.app')
 
 @section('title', 'Learn Spanish')

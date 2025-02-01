@@ -12,7 +12,7 @@
     <header>
     <div class="logo">
     <a href="/">
-        <img src="/images/logo.png" alt="logo" style="height: 50px;">
+        <img src="{{\Illuminate\Support\Facades\Vite::asset('resources/images/logo.png')}}" alt="logo" style="height: 50px;">
     </a>
 </div>
         <nav>
