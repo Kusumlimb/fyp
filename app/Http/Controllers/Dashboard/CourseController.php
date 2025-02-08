@@ -29,7 +29,7 @@ class CourseController extends Controller
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
-             'course_name'        => 'required|string|unique|max:255',
+             'course_name'        => 'required|string|unique:courses,title|max:255',
              'course_description' => 'required|string|max:1000',
         ]);
 
@@ -67,7 +67,7 @@ class CourseController extends Controller
                   'required',
                   'string',
                   'max:255',
-                  Rule::unique('courses')->ignore($course->id), // Ensure uniqueness while ignoring the current course
+                  Rule::unique('courses', 'title')->ignore($course->id), // Ensure uniqueness while ignoring the current course
              ],
              'course_description' => 'required|string|max:1000',
         ]);

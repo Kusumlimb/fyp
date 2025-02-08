@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\LessonController;
 use App\Http\Controllers\Dashboard\QuizController;
+use App\Http\Controllers\Dashboard\StudentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
@@ -65,7 +66,18 @@ Route::middleware(['auth', 'verified', 'role:teacher'])->group(function(){
      });
 });
 
+Route::middleware(['auth', 'verified', 'role:student'])->group(function(){
+     Route::prefix('dashboard')->as('dashboard.')->group(function(){
+          Route::get('/', function () {
+               return view('dashboard');
+          })->name('index');
+          
+          // Route::prefix('courses')->as('courses.')->group(function(){
+          //      Route::get('/', [StudentController::class, 'index'])->name('index');
 
+          // });
+     });
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
