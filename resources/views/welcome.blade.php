@@ -17,15 +17,23 @@
 </div>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
+                <li><a href="{{route('welcome')}}">Home</a></li>
                 <li><a href="/about/language">Languages</a></li>
                 <li><a href="/about/blog">Blog</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
         </nav>
         <div>
+            @guest
             <a href="/register" style="margin-right: 15px; color: white;">Register</a>
             <a href="/login" style="color: white;">Log In</a>
+            @endguest
+            @auth
+                <form method="POST" action="{{route('logout')}}">
+                    @csrf
+                    <a onclick="event.preventDefault(); this.closest('form').submit()" href="#" style="color: white;">Log Out</a>
+                </form>
+            @endauth
         </div>
     </header>
     <div class="hero">

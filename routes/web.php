@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/about/language', function () {
      return view('about.language');
