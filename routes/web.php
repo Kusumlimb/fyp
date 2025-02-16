@@ -1,12 +1,18 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\LessonController;
 use App\Http\Controllers\Dashboard\QuizController;
 use App\Http\Controllers\Dashboard\StudentController;
+use App\Http\Controllers\Student\DashController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Student\ScourseController;
+use App\Http\Controllers\Student\SlessonController;
+use App\Http\Controllers\Student\SquizController;
+use App\Http\Controllers\StudentController as ControllersStudentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 
@@ -66,17 +72,32 @@ Route::middleware(['auth', 'verified', 'role:teacher'])->group(function(){
      });
 });
 
-Route::middleware(['auth', 'verified', 'role:student'])->group(function(){
-     Route::prefix('dashboard')->as('dashboard.')->group(function(){
-          Route::get('/', function () {
-               return view('dashboard');
-          })->name('index');
-          
-          // Route::prefix('courses')->as('courses.')->group(function(){
-          //      Route::get('/', [StudentController::class, 'index'])->name('index');
+Route::middleware(['auth', 'verified', 'role:student'])->group(function () {
+    Route::get('/student/index', [DashController::class, 'index'])->name('student.index');
 
-          // });
-     });
+    Route::get('/student/courses', [ScourseController::class, 'index'])->name('student.courses.index');
+    Route::get('/student/courses/{course}', [ScourseController::class, 'show'])->name('student.courses.show');
+
+
+    // Grouping routes under 'student/courses/{course}' prefix for Lessons
+Route::prefix('student/courses/{course}')->group(function () {
+    Route::get('/lessons', [SlessonController::class, 'index'])->name('student.lessons.index');
+    Route::get('/lessons/{lesson}', [SlessonController::class, 'show'])->name('student.lessons.show');
+});
+
+// Grouping routes under 'student/courses/{course}' prefix for Quizzes
+Route::prefix('student/courses/{course}')->group(function () {
+    Route::get('/quizzes', [SquizController::class, 'index'])->name('student.quizzes.index');
+    Route::get('/quizzes/{quiz}', [SquizController::class, 'show'])->name('student.quizzes.show');
+});
+
+    
+});
+ 
+
+ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
+    Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
 });
 
 Route::middleware('auth')->group(function () {

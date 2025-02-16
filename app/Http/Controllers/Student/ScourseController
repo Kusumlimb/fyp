@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Controllers\Student;
+use App\Models\Course;
+use App\Models\Lesson;
+use App\Models\Quiz;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+
+class ScourseController extends Controller
+{
+    public function index()
+    {
+        $courses = Course::with('lessons', 'quizzes')->get();
+        return view('student.courses.index', compact('courses'));
+    }
+
+    public function show(Course $course)
+    {
+        $lessons = $course->lessons; // Get lessons for the course
+        $quizzes = $course->quizzes; // Get quizzes for the course
+        return view('student.courses.show', compact('course', 'lessons', 'quizzes'));
+    }
+    
+}

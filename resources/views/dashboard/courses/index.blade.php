@@ -1,6 +1,12 @@
 @extends('layouts.dashboard.dashboard')
 @section('title', 'Courses')
 @section('content')
+    @if(session('success'))
+        <div class="mb-4 rounded-md bg-green-50 p-4 text-sm text-green-700 shadow-md">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
             <h1 class="text-base font-semibold text-gray-900">Courses</h1>
@@ -47,7 +53,6 @@
                 <div class="mt-3">
                 {{$courses->links()}}
                 </div>
-
             </div>
         </div>
     </div>
