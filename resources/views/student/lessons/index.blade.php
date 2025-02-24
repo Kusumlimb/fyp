@@ -4,22 +4,24 @@
 
 @section('content')
 <div class="container">
-    <h1>Lessons for {{ $course->title }}</h1>
-
-    @if($lessons->isEmpty())
-        <p>No lessons available.</p>
-    @else
-        <ul>
-            @foreach ($lessons as $lesson)
+  @forelse($courses as $course)
+      <h1> {{ $course->title }}</h1>
+      <ul>
+        @forelse($course->lessons as $lesson)
                 <li>
-                    <a href="{{ route('student.lessons.show', ['course' => $course->id, 'lesson' => $lesson->id]) }}">
+                   <a href="{{ route('student.lessons.show', ['course' => $course->id, 'lesson' => $lesson->id]) }}">
                         {{ $lesson->title }}
                     </a>
                 </li>
-            @endforeach
-        </ul>
-    @endif
+      @empty
+      <li>No lesson found</li>
+      @endforelse
+       </ul>
 
-    <p><a href="{{ route('student.courses.show', ['course' => $course->id]) }}">Back to Course</a></p>
+      
+  @empty
+   <p>No courses
+   <p>No courses available.</p>
+  @endforelse
 </div>
 @endsection

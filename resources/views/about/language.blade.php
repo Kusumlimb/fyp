@@ -40,43 +40,44 @@
         <img src="https://flagcdn.com/fr.svg" alt="French Flag">
         <div class="language-name">French</div>
         <div class="learner-count">32.2M learners</div>
-        <a href="/courses/french" class="language-button">Learn French</a>
+        <a href="{{ route('languages.french') }}" class="language-button">Learn French</a>
       </div>
       <div class="language-card">
         <img src="https://flagcdn.com/de.svg" alt="German Flag">
         <div class="language-name">German</div>
         <div class="learner-count">20.5M learners</div>
-        <a href="/courses/german" class="language-button">Learn German</a>
+        <a href="{{ route('languages.german') }}" class="language-button">Learn German</a>
       </div>
       <div class="language-card">
         <img src="https://flagcdn.com/it.svg" alt="Italian Flag">
         <div class="language-name">Italian</div>
         <div class="learner-count">12.8M learners</div>
-        <a href="/courses/italian" class="language-button">Learn Italian</a>
+        <a href="{{ route('languages.italian') }}" class="language-button">Learn Italian</a>
       </div>
       <div class="language-card">
         <img src="https://flagcdn.com/br.svg" alt="Portuguese Flag">
         <div class="language-name">Portuguese</div>
         <div class="learner-count">5.66M learners</div>
-        <a href="/courses/portuguese" class="language-button">Learn Portuguese</a>
+        <a href="{{ route('languages.portuguese') }}" class="language-button">Learn Portuguese</a>
       </div>
       <div class="language-card">
         <img src="https://flagcdn.com/nl.svg" alt="Dutch Flag">
         <div class="language-name">Dutch</div>
         <div class="learner-count">1.84M learners</div>
-        <a href="/courses/dutch" class="language-button">Learn Dutch</a>
+        <a href="{{ route('languages.dutch') }}" class="language-button">Learn Dutch</a>
       </div>
       <div class="language-card">
-        <img src="https://flagcdn.com/ie.svg" alt="Irish Flag">
-        <div class="language-name">Irish</div>
-        <div class="learner-count">1.55M learners</div>
-        <a href="/courses/irish" class="language-button">Learn Irish</a>
+        <img src="https://flagcdn.com/gb.svg" alt="English Flag">
+        <div class="language-name">English</div>
+        <div class="learner-count">3.2M learners</div>
+        <a href="{{ route('languages.english') }}" class="language-button">Learn English</a>
       </div>
+
       <div class="language-card">
         <img src="https://flagcdn.com/dk.svg" alt="Danish Flag">
         <div class="language-name">Danish</div>
         <div class="learner-count">913K learners</div>
-        <a href="/courses/danish" class="language-button">Learn Danish</a>
+        <a href="{{ route('languages.danish') }}" class="language-button">Learn Danish</a>
       </div>
     </div>
   </div>

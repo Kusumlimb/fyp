@@ -12,9 +12,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\ScourseController;
 use App\Http\Controllers\Student\SlessonController;
 use App\Http\Controllers\Student\SquizController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StudentController as ControllersStudentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,6 +38,27 @@ Route::get('/about/language', function () {
  Route::get('/about/languages/spanish', function () {
      return view('about.languages.spanish');
  })->name('languages.spanish');
+ Route::get('/about/languages/dutch', function () {
+    return view('about.languages.dutch');
+})->name('languages.dutch');
+Route::get('/about/languages/french', function () {
+    return view('about.languages.french');
+})->name('languages.french');
+Route::get('/about/languages/german', function () {
+    return view('about.languages.german');
+})->name('languages.german');
+Route::get('/about/languages/italian', function () {
+    return view('about.languages.italian');
+})->name('languages.italian');
+Route::get('/about/languages/portuguese', function () {
+    return view('about.languages.portuguese');
+})->name('languages.portuguese');
+Route::get('/about/languages/english', function () {
+    return view('about.languages.english');
+})->name('languages.english');
+Route::get('/about/languages/danish', function () {
+    return view('about.languages.danish');
+})->name('languages.danish');
  
 Route::middleware(['auth', 'verified', 'role:teacher'])->group(function(){
      Route::prefix('dashboard')->as('dashboard.')->group(function(){
@@ -80,8 +104,9 @@ Route::middleware(['auth', 'verified', 'role:student'])->group(function () {
 
 
     // Grouping routes under 'student/courses/{course}' prefix for Lessons
+    Route::get('student/courses/lessons/list', [SlessonController::class, 'index'])->name('student.lessons.index');
 Route::prefix('student/courses/{course}')->group(function () {
-    Route::get('/lessons', [SlessonController::class, 'index'])->name('student.lessons.index');
+    
     Route::get('/lessons/{lesson}', [SlessonController::class, 'show'])->name('student.lessons.show');
 });
 
@@ -96,8 +121,13 @@ Route::prefix('student/courses/{course}')->group(function () {
  
 
  Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
-    Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
+    Route::get('/admin/index', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/admin/users', [AdminController::class, 'show'])->name('admin.users');
     Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
+    Route::get('/admin/courses', [AdminController::class, 'courses'])->name('admin.courses');
+    Route::delete('/admin/courses/{id}', [AdminController::class, 'deleteCourse'])->name('admin.deleteCourse');
+    Route::get('/admin/lessons', [AdminController::class, 'lessons'])->name('admin.lessons');
+    Route::delete('/admin/lessons/{id}', [AdminController::class, 'deleteLesson'])->name('admin.deleteLesson');
 });
 
 Route::middleware('auth')->group(function () {
@@ -107,10 +137,15 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// Route::middleware(['auth','admin'])->group(function(){
-//     Route::resource('admin/users',RegisteredUserController::class);
-//     Route::resource('admin/courses',CourseController::class);
-//     Route::resource('admin/lessons', LessonController::class);
-// });
+// Khalti Payment Routes
+Route::post('/khalti/payment', [PaymentController::class, 'verifyPayment'])->name('khalti.payment');
 
+Route::get('/payment/payment', function () {
+    return view('payment.payment'); 
+})->name('payment.payment');
+
+
+Route::get('/thank-you', function () {
+    return view('thank-you'); 
+})->name('thank-you');
 require __DIR__.'/auth.php';

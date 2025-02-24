@@ -1,77 +1,107 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Learn German</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #084f9c;
+            color: #333;
+        }
 
-@section('title', 'Learn German')
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 
-@section('content')
-    <div class="language-page">
+        h1 {
+            font-size: 2.5em;
+            color: #0a74d3;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-top: 30px;
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0a74d3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #084f9c;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ccc;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
         <h1>Learn German</h1>
-        <p>German is a widely spoken language in Europe. Our course offers detailed lessons that will make you fluent in German.</p>
+        <p>German is one of the most widely spoken languages in the world. Our course will help you learn basic to advanced Spanish in no time!</p>
 
         <h2>Course Details</h2>
         <ul>
-            <li>German Vocabulary and Grammar</li>
-            <li>Practice Conversations</li>
-            <li>Audio and Video Lessons</li>
+            <li>German Vocabulary</li>
+            <li>Grammar and Sentence Structure</li>
+            <li>Practice Exercises and Video Lessons</li>
         </ul>
 
         <h3>Course Pricing</h3>
-        <p><strong>Basic Course:</strong> $109</p>
-        <p><strong>Advanced Course:</strong> $219</p>
+        <p><strong>Basic Course:</strong> $99</p>
+        <p><strong>Advanced Course:</strong> $199</p>
 
-        <a href="/register" class="btn btn-primary">Register for German Course</a>
+        <a href="/register" class="btn">Register for German Course</a>
+        <a href="javascript:history.back()" class="btn-back">Go Back</a>
     </div>
-@endsection
-
-<style>
-    .language-page {
-        background-color: #fff;
-        color: #333;
-        padding: 40px;
-        margin: 20px auto;
-        text-align: center;
-        max-width: 800px;
-    }
-
-    .language-page h1 {
-        font-size: 2.5em;
-        margin-bottom: 20px;
-    }
-
-    .language-page h2 {
-        font-size: 2em;
-        margin-top: 30px;
-    }
-
-    .language-page ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .language-page ul li {
-        font-size: 1.1em;
-        margin: 10px 0;
-    }
-
-    .language-page h3 {
-        font-size: 1.8em;
-        margin-top: 30px;
-    }
-
-    .language-page p {
-        font-size: 1.2em;
-        margin: 10px 0;
-    }
-
-    .language-page .btn {
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: #0a74d3;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-    }
-
-    .language-page .btn:hover {
-        background-color: #084f9c;
-    }
-</style>
+</body>
+</html>

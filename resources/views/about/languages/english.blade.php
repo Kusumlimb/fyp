@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Learn Portuguese</title>
+    <title>Learn English</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -86,12 +86,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>Learn Portuguese</h1>
-        <p>Portuguese is one of the most widely spoken languages in the world. Our course will help you learn basic to advanced Spanish in no time!</p>
+        <h1>Learn English</h1>
+        <p>English is the most widely spoken language in the world. Our course will help you learn basic to advanced English in no time!</p>
 
         <h2>Course Details</h2>
         <ul>
-            <li>Portuguese Vocabulary</li>
+            <li>English Vocabulary</li>
             <li>Grammar and Sentence Structure</li>
             <li>Practice Exercises and Video Lessons</li>
         </ul>
@@ -100,7 +100,7 @@
         <p><strong>Basic Course:</strong> $99</p>
         <p><strong>Advanced Course:</strong> $199</p>
 
-        <a href="/register" class="btn">Register for Portuguese Course</a>
+        <a href="/register" class="btn">Register for English Course</a>
         <a href="javascript:history.back()" class="btn-back">Go Back</a>
     </div>
 </body>

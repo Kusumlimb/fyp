@@ -8,12 +8,13 @@ use App\Http\Controllers\Controller;
 
 class SlessonController extends Controller
 {
-    public function index(Course $course) // Accepting course as a parameter
+    public function index() // Accepting course as a parameter
     {
-        $lessons = Lesson::where('course_id', $course->id)->get(); // Fetch lessons for the specific course
+        $courses= Course::with('lessons')->get();
+       
         return view('student.lessons.index', [
-            'lessons' => $lessons,
-            'courseId' => $course->id, // Pass courseId to the view
+            'courses' => $courses,
+            'activeMenu'=> 'lessons'
         ]);
     }
 

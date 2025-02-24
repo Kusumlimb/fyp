@@ -32,8 +32,8 @@ class AuthenticatedSessionController extends Controller
 
     return match ($role) {
         'teacher' => redirect()->intended(route('dashboard.index', absolute: false)),
-        'student' => redirect()->intended(route('student.index', absolute: false)),
-        'admin'   => redirect()->intended(route('admin.users', absolute: false)),
+        'student' => redirect()->intended(route('payment.payment', absolute: false)),
+        'admin'   => redirect()->intended(route('admin.index', absolute: false)),
         default   => redirect()->route('home'), 
     };
 }

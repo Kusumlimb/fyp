@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+  
+    'khalti' => [
+        'public_key' => env('15ef4852257b4064aa8bb38077ea7cf1'),
+        'secret_key' => env('d5b471dd4fa345faabd760db3f468c64'),
+        'payment_url' => 'https://khalti.com/api/v2/payment/verify/',
+    ],
+
+    
+
 ];

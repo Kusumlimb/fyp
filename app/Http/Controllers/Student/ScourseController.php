@@ -11,9 +11,11 @@ use App\Http\Controllers\Controller;
 class ScourseController extends Controller
 {
     public function index()
-    {
-        $courses = Course::with('lessons', 'quizzes')->get();
-        return view('student.courses.index', compact('courses'));
+    {   
+        $data['activeMenu'] = 'courses';
+        
+        $data['courses']  = Course::with('lessons', 'quizzes')->get();
+        return view('student.courses.index')->with($data);
     }
 
     public function show(Course $course)
