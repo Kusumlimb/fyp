@@ -20,4 +20,12 @@ class IndexController extends Controller
           ]);
      }
 
+     public function courseDetail(Course $course)
+     {
+          $course->load(['instructor', 'lessons'])->loadCount('students');
+          return view('front.course-detail')->with([
+               'course' => $course
+          ]);
+     }
+
 }

@@ -6,7 +6,7 @@
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          height: calc(100vh - 90px);
+          min-height: calc(100vh - 90px);
       }
       .hero h1 {
           font-size: 2.5rem;

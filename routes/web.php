@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->name('front.home');
 Route::get('/languages', [IndexController::class, 'courses'] )->name('front.courses');
+Route::get('/languages/{course:slug}', [IndexController::class, 'courseDetail'] )->name('front.courses.course-detail');
+
+Route::middleware(['auth', 'verified', 'role:student'])->group(function(){
+     Route::post('initiate-payment/{course:slug}', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');
+     Route::get('payment-confirmation', [PaymentController::class, 'verifyPayment'])->name('payment.verify-payment');
+
+});
+
 
  Route::get('/about/blog', function () {
      return view('about.blog');
@@ -24,31 +32,7 @@ Route::get('/languages', [IndexController::class, 'courses'] )->name('front.cour
      return view('about.contact');
  });
  
- Route::get('/about/languages/spanish', function () {
-     return view('about.languages.spanish');
- })->name('languages.spanish');
- Route::get('/about/languages/dutch', function () {
-    return view('about.languages.dutch');
-})->name('languages.dutch');
-Route::get('/about/languages/french', function () {
-    return view('about.languages.french');
-})->name('languages.french');
-Route::get('/about/languages/german', function () {
-    return view('about.languages.german');
-})->name('languages.german');
-Route::get('/about/languages/italian', function () {
-    return view('about.languages.italian');
-})->name('languages.italian');
-Route::get('/about/languages/portuguese', function () {
-    return view('about.languages.portuguese');
-})->name('languages.portuguese');
-Route::get('/about/languages/english', function () {
-    return view('about.languages.english');
-})->name('languages.english');
-Route::get('/about/languages/danish', function () {
-    return view('about.languages.danish');
-})->name('languages.danish');
- 
+
 Route::middleware(['auth', 'verified', 'role:teacher'])->group(function(){
      Route::prefix('dashboard')->as('dashboard.')->group(function(){
           Route::get('/', function () {
