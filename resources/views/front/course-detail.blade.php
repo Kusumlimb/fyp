@@ -35,7 +35,13 @@
                 @guest
                 <a href="{{route('login')}}" class="bg-[#f8b400] text-[#0a3d72] px-5 py-2 rounded-lg text-center font-semibold hover:bg-[#f39c12] transition-all duration-300 shadow-lg transform hover:scale-105">Login to Continue</a>
                 @else
-                <button type="button" class="bg-[#f8b400] text-[#0a3d72] px-5 py-2 rounded-lg text-center font-semibold hover:bg-[#f39c12] transition-all duration-300 shadow-lg transform hover:scale-105" id="khalti-pay-btn">Purchase</button>
+                    @if(auth()->user()->isStudent())
+                        @if($isAlreadyEnrolled)
+                            <a href="{{route('front.home')}}" class="bg-green-500  px-5 py-2 rounded-lg text-center font-semibold hover:bg-green-600 transition-all duration-300 shadow-lg transform hover:scale-105">Start Learning</a>
+                        @else
+                            <button type="button" class="bg-[#f8b400] text-[#0a3d72] px-5 py-2 rounded-lg text-center font-semibold hover:bg-[#f39c12] transition-all duration-300 shadow-lg transform hover:scale-105" id="khalti-pay-btn">Purchase</button>
+                        @endif
+                    @endif
                 @endif
                 <a href="{{ route('front.courses') }}" class="bg-gray-500 text-white px-5 py-2 rounded-lg text-center font-semibold hover:bg-gray-600 transition-all duration-300 shadow-lg">Back</a>
             </div>
@@ -61,7 +67,7 @@
                    error: function(xhr) {
                        Swal.fire({
                            title: 'Error!',
-                           text: xhr.message,
+                           text: xhr.responseJSON.message,
                            icon: 'error',
                            confirmButtonText: 'Close'
                        })

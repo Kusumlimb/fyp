@@ -66,12 +66,9 @@ class User extends Authenticatable
         return $this->role === 'student';
     }
 
-     /**
-     * Relationship: A user (student) can belong to multiple courses.
-     */
-    public function course(): BelongsTo
+    public function courses(): BelongsToMany
     {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->belongsToMany(Course::class, 'course_student', 'user_id', 'course_id');
     }
 
 }

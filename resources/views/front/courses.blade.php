@@ -23,12 +23,6 @@
        .language-card:hover {
            transform: translateY(-5px);
        }
-       .language-card a{
-           background-color: #f39c12;
-           color: white;
-           border-radius: 5px;
-           padding: 5px 10px;
-       }
     </style>
 @endpush
 @section('content')
@@ -40,7 +34,12 @@
                     <img src="{{asset("storage/{$course->thumbnail}")}}" class="object-cover max-w-full" alt="{{$course->title}}">
                     <div class="text-xl mb-1">{{$course->title}}</div>
                     <div class="text-md mb-1">{{$course->students_count}} learners</div>
-                    <a href="{{ route('front.courses.course-detail', $course->slug) }}" class="text-xs mb-2 text-red-500">View Details</a>
+                    <div>
+                    <a href="{{ route('front.courses.course-detail', $course->slug) }}" class="text-xs mb-2 bg-[#f39c12] rounded px-2 py-1">View Details</a>
+                    @if(in_array( $course->id, $myCourses))
+                        <a href="{{ route('front.courses.course-detail', $course->slug) }}" class="text-xs mb-2 bg-green-500 rounded px-2 py-1">Start Learning</a>
+                    @endif
+                    </div>
                 </div>
             @endforeach
         </div>
