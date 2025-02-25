@@ -22,8 +22,9 @@
                 @csrf
                 <a class="text-xs bg-red-500 rounded px-2 py-1" onclick="event.preventDefault(); this.closest('form').submit()" href="#" style="color: white;">Log Out</a>
             </form>
+            @if(!auth()->user()->isStudent())
             <a href="{{route('dashboard.index')}}" class="text-xs bg-[#f39c12] rounded px-2 py-1">Dashboard</a>
-
+            @endif
         @endauth
     </div>
 </header>
