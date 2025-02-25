@@ -7,8 +7,8 @@
 
     <title>@yield('title', config('app.name', 'Laravel'))</title>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    @stack('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 <body x-data="{ mobileMenuOpen: false }" class="font-sans antialiased h-full bg-white">
     <div class="relative z-50 lg:hidden"

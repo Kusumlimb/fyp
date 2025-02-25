@@ -17,8 +17,10 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
+             'user_id' =>  UserFactory::class,
              'title'       => $this->faker->unique()->word(),
              'description' => $this->faker->paragraph(),
+             'price'       => $this->faker->randomNumber(2),
         ];
     }
 }

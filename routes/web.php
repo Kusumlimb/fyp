@@ -1,31 +1,20 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\LessonController;
 use App\Http\Controllers\Dashboard\QuizController;
-use App\Http\Controllers\Dashboard\StudentController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\Student\DashController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\ScourseController;
 use App\Http\Controllers\Student\SlessonController;
 use App\Http\Controllers\Student\SquizController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\StudentController as ControllersStudentController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
-
-Route::get('/about/language', function () {
-     return view('about.language');
- });
+Route::get('/', [IndexController::class, 'index'])->name('front.home');
+Route::get('/languages', [IndexController::class, 'courses'] )->name('front.courses');
 
  Route::get('/about/blog', function () {
      return view('about.blog');

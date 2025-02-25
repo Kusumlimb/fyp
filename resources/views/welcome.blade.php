@@ -18,7 +18,7 @@
         <nav>
             <ul>
                 <li><a href="{{route('welcome')}}">Home</a></li>
-                <li><a href="/about/language">Languages</a></li>
+                <li><a href="{{route('front.courses')}}">Languages</a></li>
                 <li><a href="/about/blog">Blog</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>

@@ -22,7 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // Added role
+        'role',
     ];
 
     /**
@@ -51,17 +51,17 @@ class User extends Authenticatable
     /**
      * Role-based access helper methods.
      */
-    public function isAdmin()
+    public function isAdmin() : bool
     {
         return $this->role === 'admin';
     }
 
-    public function isTeacher()
+    public function isTeacher() : bool
     {
         return $this->role === 'teacher';
     }
 
-    public function isStudent()
+    public function isStudent() : bool
     {
         return $this->role === 'student';
     }

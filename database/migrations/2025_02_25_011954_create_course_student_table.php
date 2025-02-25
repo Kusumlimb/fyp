@@ -9,15 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up() : void
+    public function up(): void
     {
-        Schema::create('courses', function (Blueprint $table) {
-            $table->id();
+        Schema::create('course_student', function (Blueprint $table) {
+            $table->foreignId('course_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->string('title');  
-            $table->text('description');
-            $table->unsignedBigInteger('price');
-            $table->timestamps();  
+            $table->primary(['course_id', 'user_id']);
         });
     }
 
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('course_student');
     }
 };

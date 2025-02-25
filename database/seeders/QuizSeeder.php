@@ -14,7 +14,7 @@ class QuizSeeder extends Seeder
      */
     public function run(): void
     {
-         Course::factory(10)->create()->each(function ($course) {
+         Course::query()->get()->each(function ($course) {
               $quizzes = Quiz::factory(2)->create(['course_id' => $course->id]);
               $quizzes->each(function ($quiz) {
                    Option::factory(3)->create(['quiz_id' => $quiz->id]);

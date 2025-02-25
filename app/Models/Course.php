@@ -4,6 +4,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
@@ -11,8 +13,10 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
+         'user_id',
         'title',
         'description',
+         'price'
     ];
 
 
@@ -24,6 +28,15 @@ class Course extends Model
      public function quizzes() : HasMany
      {
          return $this->hasMany(Quiz::class);
+     }
+
+     public function user() : BelongsTo{
+         return $this->belongsTo(User::class);
+     }
+
+     public function students() : BelongsToMany
+     {
+          return $this->belongsToMany(User::class, 'course_student');
      }
 
 }
