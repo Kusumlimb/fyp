@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Dashboard;
+use App\Enums\Role;
 use App\Models\Course;
-use App\Models\Lesson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
@@ -12,8 +14,14 @@ class CourseController extends Controller
      public function index()
      {
           $data['activeMenu'] = 'courses';
-          $data['courses'] =  Course::query()->paginate(5); // Get all courses from the database
-          return view('dashboard.courses.index')->with($data); // Pass courses to the index view
+          $data['courses'] =  Course::query()->select('courses.id', 'thumbnail', 'title', 'price', 'courses.created_at')->when(auth()->user()->role === Role::TEACHER, function
+          ($query){
+               $query->where('user_id', auth()->user()->id);
+          })->when(auth()->user()->role === Role::ADMIN, function($query){
+               $query->join('users', 'courses.user_id', '=', 'users.id')
+               ->addSelect('users.name as instructor_name');
+          })->paginate(5);
+          return view('dashboard.courses.index')->with($data);
      }
 
 
@@ -27,18 +35,21 @@ class CourseController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $validatedData = $request->validate([
-             'course_name'        => 'required|string|unique:courses,title|max:255',
-             'course_description' => 'required|string|max:1000',
+             'course_name'        => ['required', 'string', 'unique:courses,title', 'max:255'],
+             'course_description' => ['required', 'string', 'max:1000'],
+             'thumbnail'          => ['required', 'image', 'max:2048'],
+             'course_price'               => ['required', 'numeric', 'min:10'],
         ]);
-
-        // Create a new course using the validated data
-        $course = new Course();
-        $course->title = $validatedData['course_name'];
-        $course->description = $validatedData['course_description'];
-        $course->save();
-  
+        $thumbnailPath = $request->file('thumbnail')->store('courses/thumbnails', 'public');
+        Course::query()->create([
+             'title'       => $validatedData['course_name'],
+             'slug'        => Str::slug($validatedData['course_name']),
+             'description' => $validatedData['course_description'],
+             'thumbnail'   => $thumbnailPath,
+             'price'       => $validatedData['course_price'] * 100,
+             'user_id'     => auth()->user()->id
+        ]);
         return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully!');
    
     }
@@ -55,7 +66,6 @@ class CourseController extends Controller
         return view('dashboard.courses.edit')->with($data);
     }
 
-    // Update an existing course
     public function update(Request $request, Course $course)
     {
         // Ensure the user is authorized to update this course (check ownership or role)
@@ -63,19 +73,24 @@ class CourseController extends Controller
         //     abort(403); // Unauthorized
         // }
         $validatedData = $request->validate([
-             'course_name'        =>  [
-                  'required',
-                  'string',
-                  'max:255',
-                  Rule::unique('courses', 'title')->ignore($course->id), // Ensure uniqueness while ignoring the current course
-             ],
-             'course_description' => 'required|string|max:1000',
+             'course_name'        => ['required', 'string', 'max:255', Rule::unique('courses', 'title')->ignore($course->id)],
+             'course_description' => ['required', 'string', 'max:1000'],
+             'thumbnail'          => ['required_without:thumbnail_old', 'image', 'max:2048'],
+             'course_price'       => ['required', 'numeric', 'min:10'],
         ]);
 
-        // Update the course
-        $course->title = $validatedData['course_name'];
-        $course->description = $validatedData['course_description'];
-        $course->save();
+         $thumbnailPath = $course->thumbnail;
+        if($request->hasFile('thumbnail')){
+             Storage::disk('public')->delete($thumbnailPath);
+            $thumbnailPath = $request->file('thumbnail')->store('courses/thumbnails', 'public');
+        }
+
+        Course::query()->where('id', $course->id)->update([
+             'title'       => $validatedData['course_name'],
+             'description' => $validatedData['course_description'],
+             'price'       => $validatedData['course_price'] * 100,
+             'thumbnail'   => $thumbnailPath,
+        ]);
 
         return redirect()->route('dashboard.courses.index')->with('success', 'Course updated successfully!');
     }

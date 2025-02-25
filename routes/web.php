@@ -1,11 +1,12 @@
 <?php
 
+use App\Enums\Role;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Dashboard\CourseController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\LessonController;
 use App\Http\Controllers\Dashboard\QuizController;
 use App\Http\Controllers\IndexController;
-use App\Http\Controllers\Student\DashController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\ScourseController;
 use App\Http\Controllers\Student\SlessonController;
@@ -13,31 +14,23 @@ use App\Http\Controllers\Student\SquizController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
+
+$teacherRole = Role::TEACHER->value;
+$adminRole = Role::ADMIN->value;
+$studentRole = Role::STUDENT->value;
+
 Route::get('/', [IndexController::class, 'index'])->name('front.home');
 Route::get('/languages', [IndexController::class, 'courses'] )->name('front.courses');
 Route::get('/languages/{course:slug}', [IndexController::class, 'courseDetail'] )->name('front.courses.course-detail');
 
-Route::middleware(['auth', 'verified', 'role:student'])->group(function(){
+Route::middleware(['auth', "role:$studentRole"])->group(function(){
      Route::post('initiate-payment/{course:slug}', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');
      Route::get('payment-confirmation', [PaymentController::class, 'verifyPayment'])->name('payment.verify-payment');
-
 });
 
-
- Route::get('/about/blog', function () {
-     return view('about.blog');
- });
- 
- Route::get('/about/contact', function () {
-     return view('about.contact');
- });
- 
-
-Route::middleware(['auth', 'verified', 'role:teacher'])->group(function(){
+Route::middleware(['auth', 'verified', "role:$teacherRole,$adminRole"])->group(function(){
      Route::prefix('dashboard')->as('dashboard.')->group(function(){
-          Route::get('/', function () {
-               return view('dashboard');
-          })->name('index');
+          Route::get('/', [DashboardController::class, 'index'])->name('index');
 
           Route::prefix('courses')->as('courses.')->group(function(){
                Route::get('/', [CourseController::class, 'index'])->name('index');
@@ -70,7 +63,7 @@ Route::middleware(['auth', 'verified', 'role:teacher'])->group(function(){
 });
 
 Route::middleware(['auth', 'verified', 'role:student'])->group(function () {
-    Route::get('/student/index', [DashController::class, 'index'])->name('student.index');
+
 
     Route::get('/student/courses', [ScourseController::class, 'index'])->name('student.courses.index');
     Route::get('/student/courses/{course}', [ScourseController::class, 'show'])->name('student.courses.show');
@@ -109,16 +102,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-// Khalti Payment Routes
-Route::post('/khalti/payment', [PaymentController::class, 'verifyPayment'])->name('khalti.payment');
-
-Route::get('/payment/payment', function () {
-    return view('payment.payment'); 
-})->name('payment.payment');
-
-
-Route::get('/thank-you', function () {
-    return view('thank-you'); 
-})->name('thank-you');
 require __DIR__.'/auth.php';

@@ -6,10 +6,13 @@
     <title>@yield('title', config('app.name'))</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="{{asset('js/vendors/toastr/toastr.min.css')}}" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/css/front.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/front.css',  'resources/js/front.js', 'resources/js/app.js'])
     @stack('styles')
 </head>
 <body>
+<div class="spinner-overlay z-[100] inset-0 absolute justify-center items-center bg-gray-600/70 hidden">
+    <div class="spinner w-12 rounded-full h-12" role="status" aria-live="polite" aria-label="Loading"></div>
+</div>
 @include('layouts.front._partials.header')
 @yield('content')
 <script src="{{asset('js/vendors/jQuery-3.7.1.js')}}"></script>

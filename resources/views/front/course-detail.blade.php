@@ -59,7 +59,7 @@
                        '_token': "{{csrf_token()}}"
                    },
                    beforeSend: function (){
-
+                       document.body.classList.add('loader');
                    },
                    success: function(response) {
                      window.open(response.payment_url, '_blank');
@@ -73,7 +73,7 @@
                        })
                    },
                    complete: function (){
-
+                       document.body.classList.remove('loader');
                    }
                });
            });

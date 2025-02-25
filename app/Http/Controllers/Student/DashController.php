@@ -12,10 +12,7 @@ class DashController extends Controller
 {
     public function index()
     {
-        // Fetch courses with lessons and quizzes (since quizzes are related to courses directly)
-        $courses = Course::with(['lessons', 'quizzes'])->get(); 
-        
-        // Return the view with the courses data
+        $courses = Course::with(['lessons', 'quizzes'])->get();
         return view('student.index', compact('courses'));
     }
     

@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Vite;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,16 +16,19 @@ class DatabaseSeeder extends Seeder
         $teacher = User::factory()->create([
             'name' => 'Test Teacher',
             'email' => 'teacher@example.com',
+             'role'=> 'teacher',
         ]);
 
         User::factory()->create([
              'name' => 'Test Student',
              'email' => 'student@example.com',
+             'role'=> 'student',
         ]);
 
         User::factory()->create([
              'name' => 'Test Admin',
              'email' => 'admin@example.com',
+             'role'=> 'admin',
         ]);
 
         DB::table('courses')->insert([

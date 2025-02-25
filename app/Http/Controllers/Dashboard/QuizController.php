@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Option;
 use App\Models\Quiz;
-use App\Rules\Dashboard\UniqueOptionRule;
 use Illuminate\Http\Request;
 
 class QuizController extends Controller

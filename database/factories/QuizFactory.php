@@ -19,7 +19,6 @@ class QuizFactory extends Factory
     {
          return [
               'title'     => $this->faker->sentence(),
-              'course_id' => Course::factory(),
          ];
     }
 }

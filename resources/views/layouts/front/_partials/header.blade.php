@@ -1,7 +1,7 @@
 <header>
     <div class="logo">
         <a href="{{route('front.home')}}">
-            <img src="{{\Illuminate\Support\Facades\Vite::asset('resources/images/logo.png')}}" alt="logo" style="height: 50px;">
+            <img src="{{\Illuminate\Support\Facades\Vite::asset('resources/images/logo.png')}}" alt="logo" class="object-cover max-w-full h-[75px]">
         </a>
     </div>
     <nav>
@@ -12,7 +12,7 @@
             <li><a href="#">Contact</a></li>
         </ul>
     </nav>
-    <div>
+    <div class="flex justify-center items-center gap-x-2">
         @guest
             <a href="{{route('register')}}" style="margin-right: 15px; color: white;">Register</a>
             <a href="{{route('login')}}" style="color: white;">Log In</a>
@@ -20,8 +20,10 @@
         @auth
             <form method="POST" action="{{route('logout')}}">
                 @csrf
-                <a onclick="event.preventDefault(); this.closest('form').submit()" href="#" style="color: white;">Log Out</a>
+                <a class="text-xs bg-red-500 rounded px-2 py-1" onclick="event.preventDefault(); this.closest('form').submit()" href="#" style="color: white;">Log Out</a>
             </form>
+            <a href="{{route('dashboard.index')}}" class="text-xs bg-[#f39c12] rounded px-2 py-1">Dashboard</a>
+
         @endauth
     </div>
 </header>

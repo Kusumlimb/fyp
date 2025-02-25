@@ -23,15 +23,30 @@
                         <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Course Name</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Course Description</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Course Price</th>
+                            @if(auth()->user()->role === \App\Enums\Role::ADMIN)
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Instructor</th>
+                            @endif
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Created At</th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Actions</th>
                         </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
                         @forelse($courses as $course)
                         <tr>
-                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{$course->title}}</td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{Str::limit($course->description, 30)}}</td>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                <div class="flex items-center gap-x-2">
+                                    <span>
+                                {{$course->title}}
+                                    </span>
+                                <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="Course Thumbnail" class="w-10 h-10 rounded-full border-2 border-[#f8b400] shadow-md object-cover object-center">
+                                </div>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rs {{$course->price / 100}}</td>
+                            @if(auth()->user()->role === \App\Enums\Role::ADMIN)
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$course->instructor_name}}</td>
+                            @endif
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$course->created_at->format('m-d-Y')}}</td>
                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-sm font-medium sm:pr-6">
                                 <a href="{{route('dashboard.courses.edit', $course->id)}}" class="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 inline-block">Edit<span class="sr-only">{{$course->title}}</span></a>
                                 <a href="{{route('dashboard.quiz.create', $course->id)}}" class="rounded-md bg-green-50 px-2.5 py-1.5 text-sm font-semibold text-green-600 shadow-sm hover:bg-green-100 inline-block">Add Quiz<span class="sr-only">{{$course->title}}</span></a>

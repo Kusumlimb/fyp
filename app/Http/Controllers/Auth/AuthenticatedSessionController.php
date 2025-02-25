@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -26,15 +27,9 @@ class AuthenticatedSessionController extends Controller
 {
     $request->authenticate();
     $request->session()->regenerate();
-
-    // Redirect based on user role
-    $role = $request->user()->role;
-
-    return match ($role) {
-        'teacher' => redirect()->intended(route('dashboard.index', absolute: false)),
-        'student' => redirect()->intended(route('payment.payment', absolute: false)),
-        'admin'   => redirect()->intended(route('admin.index', absolute: false)),
-        default   => redirect()->route('home'), 
+    return match (auth()->user()->role) {
+        Role::TEACHER,Role::ADMIN => redirect()->intended(route('dashboard.index', absolute: false)),
+        default   => redirect()->route('front.home'),
     };
 }
 
