@@ -30,6 +30,9 @@ class CourseController extends Controller
 
      public function create()
     {
+         if(!auth()->user()->isTeacher()){
+              abort(403);
+         }
         $data['activeMenu'] = 'courses';
         $data['course'] = new Course();
         return view('dashboard.courses.create')->with($data);
@@ -38,6 +41,9 @@ class CourseController extends Controller
 
     public function store(Request $request)
     {
+         if(!auth()->user()->isTeacher()){
+              abort(403);
+         }
         $validatedData = $request->validate([
              'course_name'        => ['required', 'string', 'unique:courses,title', 'max:255'],
              'course_description' => ['required', 'string', 'max:1000'],
@@ -47,7 +53,6 @@ class CourseController extends Controller
         $thumbnailPath = $request->file('thumbnail')->store('courses/thumbnails', 'public');
         Course::query()->create([
              'title'       => $validatedData['course_name'],
-             'slug'        => Str::slug($validatedData['course_name']),
              'description' => $validatedData['course_description'],
              'status'      => Status::PENDING->value,
              'thumbnail'   => $thumbnailPath,
@@ -60,11 +65,9 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        // Ensure the user is authorized to edit this course (check ownership or role)
-        // if ($course->user_id !== auth()->id()) {
-        //     abort(403); // Unauthorized
-        // }
-
+         if ($course->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
+              abort(403);
+         }
         $data['activeMenu'] = 'courses';
         $data['course'] = $course;
         return view('dashboard.courses.edit')->with($data);
@@ -72,10 +75,9 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course)
     {
-        // Ensure the user is authorized to update this course (check ownership or role)
-        // if ($course->user_id !== auth()->id()) {
-        //     abort(403); // Unauthorized
-        // }
+         if ($course->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
+              abort(403);
+         }
         $validatedData = $request->validate([
              'course_name'        => ['required', 'string', 'max:255', Rule::unique('courses', 'title')->ignore($course->id)],
              'course_description' => ['required', 'string', 'max:1000'],
@@ -96,25 +98,24 @@ class CourseController extends Controller
              'thumbnail'   => $thumbnailPath,
         ]);
 
-        return redirect()->route('dashboard.courses.index')->with('success', 'Course updated successfully!');
+        return redirect()->route('dashboard.courses.index')->with('toastr.success', 'Course updated successfully!');
     }
 
-    // Delete a specific course
     public function destroy(Course $course)
     {
-        // Ensure the user is authorized to delete this course (check ownership or role)
-        // if ($course->user_id !== auth()->id()) {
-        //     abort(403); // Unauthorized
-        // }
-
-        // Delete the course
-        $course->delete();
-
+         if ($course->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
+             abort(403);
+         }
+         Storage::disk('public')->delete($course->thumbnail);
+         $course->delete();
         return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully!');
     }
 
      public function updateStatus(Course $course, Request $request)
      {
+          if (!auth()->user()->isAdmin()) {
+               abort(403);
+          }
           $request->validate([
                'status' => [Rule::enum(Status::class)],
           ]);

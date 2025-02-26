@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\LessonController;
 use App\Http\Controllers\Dashboard\QuizController;
+use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\ScourseController;
@@ -30,6 +31,16 @@ Route::middleware(['auth', "role:$studentRole"])->group(function(){
 
 Route::middleware(['auth', "role:$adminRole"])->group(function(){
      Route::put('course/{course:slug}/update-status', [CourseController::class, 'updateStatus'])->name('dashboard.courses.update-status');
+
+     Route::prefix('users')->as('dashboard.users.')->group(function(){
+          Route::get('/', [UserController::class, 'index'])->name('index');
+          Route::get('create', [UserController::class, 'create'])->name('create');
+          Route::post('/', [UserController::class, 'store'])->name('store');
+          Route::get('{user}/edit', [UserController::class, 'edit'])->name('edit');
+          Route::put('{user}', [UserController::class, 'update'])->name('update');
+          Route::delete('{user}', [UserController::class, 'destroy'])->name('destroy');
+     });
+
 });
 
 Route::middleware(['auth', 'verified', "role:$teacherRole,$adminRole"])->group(function(){
@@ -40,9 +51,9 @@ Route::middleware(['auth', 'verified', "role:$teacherRole,$adminRole"])->group(f
                Route::get('/', [CourseController::class, 'index'])->name('index');
                Route::get('create', [CourseController::class, 'create'])->name('create');
                Route::post('/', [CourseController::class, 'store'])->name('store');
-               Route::get('{course}/edit', [CourseController::class, 'edit'])->name('edit');
-               Route::put('{course}', [CourseController::class, 'update'])->name('update');
-               Route::delete('{course}', [CourseController::class, 'destroy'])->name('destroy');
+               Route::get('{course:slug}/edit', [CourseController::class, 'edit'])->name('edit');
+               Route::put('{course:slug}', [CourseController::class, 'update'])->name('update');
+               Route::delete('{course:slug}', [CourseController::class, 'destroy'])->name('destroy');
           });
 
           Route::prefix('lessons')->as('lessons.')->group(function () {

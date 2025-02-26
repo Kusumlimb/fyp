@@ -5,9 +5,11 @@
         <div class="sm:flex-auto">
             <h1 class="text-base font-semibold text-gray-900">Courses</h1>
         </div>
+        @if(auth()->user()->isTeacher())
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
             <a href="{{route('dashboard.courses.create')}}" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add Course</a>
         </div>
+        @endif
     </div>
     <div class="mt-8 flow-root">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -56,9 +58,11 @@
                             @endif
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$course->created_at->format('m-d-Y')}}</td>
                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-sm font-medium sm:pr-6">
-                                <a href="{{route('dashboard.courses.edit', $course->id)}}" class="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 inline-block">Edit<span class="sr-only">{{$course->title}}</span></a>
+                                <a href="{{route('dashboard.courses.edit', $course->slug)}}" class="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 inline-block">Edit<span class="sr-only">{{$course->title}}</span></a>
+                                @if(auth()->user()->isTeacher())
                                 <a href="{{route('dashboard.quiz.create', $course->id)}}" class="rounded-md bg-green-50 px-2.5 py-1.5 text-sm font-semibold text-green-600 shadow-sm hover:bg-green-100 inline-block">Add Quiz<span class="sr-only">{{$course->title}}</span></a>
-                                <form action="{{ route('dashboard.courses.destroy', $course->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                                @endif
+                                <form action="{{ route('dashboard.courses.destroy', $course->slug) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this course?');">
                                      @method('DELETE')
                                      @csrf
                                      <button type="submit" class="rounded-md bg-red-50 px-2.5 py-1.5 text-sm font-semibold text-red-600 shadow-sm hover:bg-red-100">Delete</button>

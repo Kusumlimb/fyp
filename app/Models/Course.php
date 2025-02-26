@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Course extends Model
 {
+     use HasSlug;
+
     protected $fillable = [
          'user_id',
          'title',
@@ -41,6 +45,14 @@ class Course extends Model
      public function students() : BelongsToMany
      {
           return $this->belongsToMany(User::class, 'course_student', 'course_id', 'user_id');
+     }
+
+     public function getSlugOptions() : SlugOptions
+     {
+          return SlugOptions::create()
+               ->generateSlugsFrom('title')
+               ->saveSlugsTo('slug')
+               ->doNotGenerateSlugsOnUpdate();
      }
 
 }

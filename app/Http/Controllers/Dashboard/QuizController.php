@@ -20,6 +20,9 @@ class QuizController extends Controller
 
      public function create(Request $request, Course $course)
      {
+          if(!auth()->user()->isTeacher()){
+               abort(403);
+          }
           $data['activeMenu'] = 'quiz';
           $data['quiz'] = new Quiz();
           $data['course'] = $course;
@@ -28,6 +31,9 @@ class QuizController extends Controller
 
      public function store(Request $request, Course $course)
      {
+          if(!auth()->user()->isTeacher()){
+               abort(403);
+          }
           $request->validate([
                'quiz_title'            => ['required', 'string', 'max:255'],
                'options'               => ['required', 'array', 'size:4'],

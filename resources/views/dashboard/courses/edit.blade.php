@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <form class="px-4 py-4 sm:px-8" enctype="multipart/form-data" method="POST" action="{{route('dashboard.courses.update', $course->id)}}" id="update-course-form">
+        <form class="px-4 py-4 sm:px-8" enctype="multipart/form-data" method="POST" action="{{route('dashboard.courses.update', $course->slug)}}" id="update-course-form">
             @method('PUT')
             @include('dashboard.courses.partials._form')
         </form>
