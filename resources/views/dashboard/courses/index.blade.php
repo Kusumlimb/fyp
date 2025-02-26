@@ -71,7 +71,7 @@
                         </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="whitespace-nowrap text-center px-3 py-4 text-sm text-gray-500">No Course Found</td>
+                                <td colspan="5" class="whitespace-nowrap text-center px-3 py-4 text-sm text-gray-500">No Course Found</td>
                             </tr>
                         @endforelse
                         </tbody>
