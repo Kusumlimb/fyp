@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Student;
 
 use App\Models\Course;
@@ -8,21 +9,26 @@ use App\Http\Controllers\Controller;
 
 class SlessonController extends Controller
 {
-    public function index() // Accepting course as a parameter
+    public function __construct()
     {
-        $courses= Course::with('lessons')->get();
-       
+        // Share courses with all views
+        view()->composer('*', function ($view) {
+            $view->with('courses', Course::with('lessons')->get());
+        });
+    }
+
+    public function index()
+    {
         return view('student.lessons.index', [
-            'courses' => $courses,
-            'activeMenu'=> 'lessons'
+            'activeMenu' => 'lessons'
         ]);
     }
 
-    public function show(Course $course, Lesson $lesson) // Accepting both course and lesson
+    public function show(Course $course, Lesson $lesson)
     {
         return view('student.lessons.show', [
             'lesson' => $lesson,
-            'courseId' => $course->id, // Pass courseId to the view
+            'course' => $course, // Pass full course object instead of just ID
         ]);
     }
 }

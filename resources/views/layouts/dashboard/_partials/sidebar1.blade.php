@@ -75,4 +75,23 @@ $activeMenu = $activeMenu ?? '';
             </li>
         </ul>
     </nav>
+
+    <!-- Video Modal -->
+<div x-data="{ showVideo: false, videoSrc: '' }" x-show="showVideo" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+    <div class="bg-white p-4 rounded-lg shadow-lg max-w-3xl w-full">
+        <button @click="showVideo = false" class="absolute top-4 right-4 text-gray-600 hover:text-gray-900">&times;</button>
+        
+        <video x-bind:src="videoSrc" controls class="w-full rounded-lg shadow-lg"></video>
+    </div>
+</div>
+
+<!-- Updated Lesson Links -->
+@foreach($course->lessons as $lesson)
+    <a href="javascript:void(0);" 
+       @click="showVideo = true; videoSrc = '{{ asset('storage/' . $lesson->video_path) }}'"
+       class="block text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-md p-2">
+        {{ $lesson->title }}
+    </a>
+@endforeach
+
 </div>

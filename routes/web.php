@@ -104,11 +104,12 @@ Route::middleware(['auth', 'verified', 'role:student'])->group(function () {
 
 
     // Grouping routes under 'student/courses/{course}' prefix for Lessons
-    Route::get('student/courses/lessons/list', [SlessonController::class, 'index'])->name('student.lessons.index');
-Route::prefix('student/courses/{course}')->group(function () {
+    Route::prefix('student/courses/{course}')->group(function () {
+        Route::get('/lessons', [SlessonController::class, 'index'])->name('student.lessons.index');
+        Route::get('/lessons/{lesson}', [SlessonController::class, 'show'])->name('student.lessons.show');
+    });
     
-    Route::get('/lessons/{lesson}', [SlessonController::class, 'show'])->name('student.lessons.show');
-});
+
 
 // Grouping routes under 'student/courses/{course}' prefix for Quizzes
 Route::prefix('student/courses/{course}')->group(function () {

@@ -3,13 +3,17 @@
 @section('title', 'Lesson Details')
 
 @section('content')
-<div class="container">
-    <h1>{{ $lesson->title }}</h1>
-    <p>{{ $lesson->description }}</p>
+    <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+        <h1 class="text-2xl font-semibold mb-4">{{ $lesson->title }}</h1>
+        
+        <video class="w-full rounded-lg shadow-lg" controls>
+            <source src="{{ url('storage/videos/' . $lesson->video_path) }}" type="video/mp4">
 
-    <h2>Video</h2>
-    <iframe width="560" height="315" src="{!! $lesson->video_url !!}" frameborder="0" allowfullscreen></iframe>
 
-    <p><a href="{{ route('student.courses.show', ['course' => $course->id]) }}">Back to Course</a></p>
-</div>
+
+            Your browser does not support the video tag.
+        </video>
+
+        <p class="mt-4 text-gray-600">{{ $lesson->description }}</p>
+    </div>
 @endsection
