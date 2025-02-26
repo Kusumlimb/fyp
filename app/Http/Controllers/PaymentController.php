@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Status;
 use App\Models\Course;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 
@@ -38,6 +38,9 @@ class PaymentController extends Controller
 
      public function initiatePayment(Course $course)
      {
+          if($course->status !== Status::ACTIVE){
+               abort(403);
+          }
           $student = auth()->user();
           $secretKey = config('services.khalti.secret_key');
           $endpoint = config('services.khalti.endpoint');

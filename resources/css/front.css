@@ -30,19 +30,3 @@ nav ul li a {
     text-decoration: none;
 }
 
-
-body.loader .spinner-overlay{
-    display: flex;
-}
-.spinner {
-    --_thickness: 25%;
-    --_speed: 800ms;
-    background: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
-    mask-image: radial-gradient(circle closest-side, transparent calc(100% - var(--_thickness)), #000 calc(100% - var(--_thickness)), #000 100%);
-    animation: rotate var(--_speed) linear infinite;
-}
-@keyframes rotate {
-    to {
-        transform: rotate(1turn);
-    }
-}

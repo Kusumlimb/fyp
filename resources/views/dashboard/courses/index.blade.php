@@ -1,12 +1,6 @@
 @extends('layouts.dashboard.dashboard')
 @section('title', 'Courses')
 @section('content')
-    @if(session('success'))
-        <div class="mb-4 rounded-md bg-green-50 p-4 text-sm text-green-700 shadow-md">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
             <h1 class="text-base font-semibold text-gray-900">Courses</h1>
@@ -24,7 +18,8 @@
                         <tr>
                             <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Course Name</th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Course Price</th>
-                            @if(auth()->user()->role === \App\Enums\Role::ADMIN)
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                            @if(auth()->user()->isAdmin())
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Instructor</th>
                             @endif
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Created At</th>
@@ -43,7 +38,20 @@
                                 </div>
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Rs {{$course->price / 100}}</td>
-                            @if(auth()->user()->role === \App\Enums\Role::ADMIN)
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                @if(auth()->user()->isAdmin())
+                                <div class="mt-2 grid grid-cols-1">
+                                    <select data-course="{{$course->slug}}" class="status-update col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                                        @foreach(\App\Enums\Status::cases() as $case)
+                                            <option value="{{$case->value}}" {{$course->status === $case ? 'selected' : ''}}>{{$case->label()}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @else
+                                    {{$course->status->label()}}
+                                @endif
+                            </td>
+                            @if(auth()->user()->isAdmin())
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$course->instructor_name}}</td>
                             @endif
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$course->created_at->format('m-d-Y')}}</td>
@@ -72,3 +80,47 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function (){
+            $(document).on('change', '.status-update',function (){
+                let that = this;
+                Swal.fire({
+                    title: 'Are You Sure?',
+                    text: 'Are you sure want to update the status?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: "Continue",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let val = $(that).val();
+                        let course = $(that).attr('data-course');
+                        let url = "{{route('dashboard.courses.update-status', ':slug')}}";
+                        url = url.replace(':slug', course);
+                        $.ajax({
+                            url: url,
+                            type: 'PUT',
+                            data: {
+                                '_token': "{{csrf_token()}}",
+                                'status': val,
+                            },
+                            beforeSend: function (){
+                                document.body.classList.add('loader');
+                            },
+                            success: function(response) {
+                                toastr.success(response.message);
+                            },
+                            error: function(xhr) {
+                                toastr.error(xhr.responseJSON.message);
+                            },
+                            complete: function (){
+                                document.body.classList.remove('loader');
+                            }
+                        });
+                    }
+                })
+
+            });
+        });
+    </script>
+@endpush

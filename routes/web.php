@@ -28,6 +28,10 @@ Route::middleware(['auth', "role:$studentRole"])->group(function(){
      Route::get('payment-confirmation', [PaymentController::class, 'verifyPayment'])->name('payment.verify-payment');
 });
 
+Route::middleware(['auth', "role:$adminRole"])->group(function(){
+     Route::put('course/{course:slug}/update-status', [CourseController::class, 'updateStatus'])->name('dashboard.courses.update-status');
+});
+
 Route::middleware(['auth', 'verified', "role:$teacherRole,$adminRole"])->group(function(){
      Route::prefix('dashboard')->as('dashboard.')->group(function(){
           Route::get('/', [DashboardController::class, 'index'])->name('index');

@@ -19,6 +19,7 @@ return new class extends Migration
              $table->text('description');
             $table->unsignedBigInteger('price');
             $table->string('thumbnail');
+            $table->string('status');
             $table->timestamps();  
         });
     }

@@ -39,7 +39,9 @@
         <span class="text-xs text-red-600 mt-1">{{$message}}</span>
         @enderror
     </div>
+    @if($course->thumbnail)
     <div class="mt-2">
     <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="Course Thumbnail" class="w-16 h-16 rounded-full border-2 border-[#f8b400] shadow-md object-cover object-center">
     </div>
+    @endif
 </div>

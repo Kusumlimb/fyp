@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 use App\Enums\Role;
+use App\Enums\Status;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,7 +15,9 @@ class CourseController extends Controller
      public function index()
      {
           $data['activeMenu'] = 'courses';
-          $data['courses'] =  Course::query()->select('courses.id', 'thumbnail', 'title', 'price', 'courses.created_at')->when(auth()->user()->role === Role::TEACHER, function
+          $data['courses'] =  Course::query()->select('courses.id', 'slug','thumbnail', 'title', 'price', 'courses.created_at', 'status')->when(auth()->user()->role ===
+               Role::TEACHER,
+               function
           ($query){
                $query->where('user_id', auth()->user()->id);
           })->when(auth()->user()->role === Role::ADMIN, function($query){
@@ -46,11 +49,12 @@ class CourseController extends Controller
              'title'       => $validatedData['course_name'],
              'slug'        => Str::slug($validatedData['course_name']),
              'description' => $validatedData['course_description'],
+             'status'      => Status::PENDING->value,
              'thumbnail'   => $thumbnailPath,
              'price'       => $validatedData['course_price'] * 100,
              'user_id'     => auth()->user()->id
         ]);
-        return redirect()->route('dashboard.courses.index')->with('success', 'Course created successfully!');
+        return redirect()->route('dashboard.courses.index')->with('toastr.success', 'Course created successfully!');
    
     }
 
@@ -108,5 +112,18 @@ class CourseController extends Controller
 
         return redirect()->route('dashboard.courses.index')->with('success', 'Course deleted successfully!');
     }
+
+     public function updateStatus(Course $course, Request $request)
+     {
+          $request->validate([
+               'status' => [Rule::enum(Status::class)],
+          ]);
+          $course->update([
+               'status' => $request->input('status'),
+          ]);
+          return response()->json([
+               'message' => 'Course status updated successfully!'
+          ]);
+     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -15,9 +16,13 @@ class Course extends Model
          'slug',
          'description',
          'price',
+         'status',
          'thumbnail'
     ];
 
+    protected $casts = [
+         'status' => Status::class,
+    ];
 
     public function lessons() : HasMany
     {

@@ -6,10 +6,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', config('app.name', 'Laravel'))</title>
+    <link href="{{asset('js/vendors/toastr/toastr.min.css')}}" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
 <body x-data="{ mobileMenuOpen: false }" class="font-sans antialiased h-full bg-white">
+<div class="spinner-overlay z-[100] inset-0 absolute justify-center items-center bg-gray-600/70 hidden">
+    <div class="spinner w-12 rounded-full h-12" role="status" aria-live="polite" aria-label="Loading"></div>
+</div>
     <div class="relative z-50 lg:hidden"
          x-show="mobileMenuOpen"
          role="dialog" aria-modal="true">
@@ -118,6 +122,21 @@
     </div>
     <script src="{{asset('js/vendors/jQuery-3.7.1.js')}}"></script>
     <script src="{{asset('js/vendors/jquery.repeater.js')}}"></script>
+    <script src="{{asset('js/vendors/toastr/toastr.min.js')}}"></script>
+    <script src="{{asset('js/vendors/sweetalert.js')}}"></script>
+<script>
+    toastr.options.positionClass =  "toast-bottom-right";
+</script>
+@if(session()->has('toastr.error'))
+    <script>
+        toastr.error("{{session('toastr.error')}}")
+    </script>
+@endif
+@if(session()->has('toastr.success'))
+    <script>
+        toastr.success("{{session('toastr.success')}}")
+    </script>
+@endif
     @stack('scripts')
 </body>
 </html>
