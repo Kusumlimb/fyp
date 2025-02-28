@@ -6,6 +6,7 @@ use App\Enums\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Course;
@@ -69,9 +70,14 @@ class User extends Authenticatable
           return $this->role === Role::STUDENT;
      }
 
-     public function courses() : BelongsToMany
+     public function enrolledCourses() : BelongsToMany
      {
           return $this->belongsToMany(Course::class, 'course_student', 'user_id', 'course_id');
+     }
+
+     public function createdCourses() : HasMany
+     {
+          return $this->hasMany(Course::class, 'user_id', 'id');
      }
 
 }

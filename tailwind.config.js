@@ -8,7 +8,7 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
-
+    darkMode: "selector",
     theme: {
         extend: {
             fontFamily: {
@@ -22,5 +22,6 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [forms,require('flowbite/plugin')
+    ],
 };

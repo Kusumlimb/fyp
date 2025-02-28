@@ -54,16 +54,20 @@ Route::middleware(['auth', 'verified', "role:$teacherRole,$adminRole"])->group(f
                Route::get('{course:slug}/edit', [CourseController::class, 'edit'])->name('edit');
                Route::put('{course:slug}', [CourseController::class, 'update'])->name('update');
                Route::delete('{course:slug}', [CourseController::class, 'destroy'])->name('destroy');
+
+
+               Route::prefix('{course:slug}/lessons')->as('lessons.')->group(function () {
+                    Route::get('/', [LessonController::class, 'index'])->name('index');
+                    Route::get('create', [LessonController::class, 'create'])->name('create');
+                    Route::post('/', [LessonController::class, 'store'])->name('store');
+                    Route::get('re-order', [LessonController::class, 'reOrder'])->name('re-order');
+                    Route::get('{lesson:slug}/edit', [LessonController::class, 'edit'])->name('edit');
+                    Route::put('{lesson:slug}', [LessonController::class, 'update'])->name('update');
+                    Route::delete('{lesson:slug}', [LessonController::class, 'destroy'])->name('destroy');
+               });
+
           });
 
-          Route::prefix('lessons')->as('lessons.')->group(function () {
-               Route::get('/', [LessonController::class, 'index'])->name('index');
-               Route::get('create', [LessonController::class, 'create'])->name('create');
-               Route::post('/', [LessonController::class, 'store'])->name('store');
-               Route::get('{lesson}/edit', [LessonController::class, 'edit'])->name('edit');
-               Route::put('{lesson}', [LessonController::class, 'update'])->name('update');
-               Route::delete('{lesson}', [LessonController::class, 'destroy'])->name('destroy');
-          });
 
           Route::prefix('quizzes')->as('quiz.')->group(function(){
                Route::get('/', [QuizController::class, 'index'])->name('index');

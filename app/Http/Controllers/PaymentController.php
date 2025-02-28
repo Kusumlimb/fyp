@@ -32,7 +32,7 @@ class PaymentController extends Controller
         $courseSlug = $request->input("purchase_order_id");
         $course = Course::query()->where('slug', $courseSlug)->first();
         $student = auth()->user();
-        $student->courses()->attach($course->id);
+        $student->enrolledCourses()->attach($course->id);
         return view('front.payment.thank-you');
     }
 
@@ -45,7 +45,7 @@ class PaymentController extends Controller
           $secretKey = config('services.khalti.secret_key');
           $endpoint = config('services.khalti.endpoint');
 
-          $isAlreadyEnrolled = in_array($course->id, auth()->user()->courses()->pluck('id')->toArray());
+          $isAlreadyEnrolled = in_array($course->id, auth()->user()->enrolledCourses()->pluck('id')->toArray());
           if($isAlreadyEnrolled){
                return response()->json(['success' => false, 'message' => 'Student Already Enrolled'], 422);
           }

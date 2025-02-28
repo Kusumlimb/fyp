@@ -91,7 +91,7 @@ class CourseController extends Controller
             $thumbnailPath = $request->file('thumbnail')->store('courses/thumbnails', 'public');
         }
 
-        Course::query()->where('id', $course->id)->update([
+         $course->update([
              'title'       => $validatedData['course_name'],
              'description' => $validatedData['course_description'],
              'price'       => $validatedData['course_price'] * 100,

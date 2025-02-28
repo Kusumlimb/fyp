@@ -27,7 +27,7 @@
                  @foreach ($course->lessons as $lesson)
                      <li class="flex justify-between items-center bg-gray-800 p-4 rounded-lg">
                          <span class="text-white font-medium">{{ $lesson->title }}</span>
-                         <span class="text-gray-400">{{ $lesson->duration }} minutes</span>
+                         <span class="text-gray-400">{{\Carbon\CarbonInterval::seconds( $lesson->duration)->cascade()->forHumans()}}</span>
                      </li>
                  @endforeach
              </ul>

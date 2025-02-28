@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->id(); 
-            $table->string('title');  
-            $table->text('description'); 
-            $table->text('video_url')->nullable(); // Nullable to allow empty value until video is uploaded
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');  // Foreign key referencing courses table
-            $table->timestamps(); 
+            $table->foreignId('course_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->string('slug');
+            $table->integer('order');
+            $table->text('description');
+            $table->text('video_url');
+            $table->float('duration');
+            $table->timestamps();
         });
     }
 

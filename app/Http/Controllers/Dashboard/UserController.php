@@ -74,6 +74,10 @@ class UserController extends Controller
         if(auth()->user()->id === $user->id){
               abort(403);
         }
+         if($user->createdCourses->isNotEmpty()){
+             return redirect()->back()->with('toastr.error', 'Cannot delete the teacher with courses.');
+         }
+
         $user->delete();
         return redirect()->route('dashboard.users.index')->with('toastr.success', 'User deleted successfully!');
     }

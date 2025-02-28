@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', config('app.name', 'Laravel'))</title>
+    <link href="{{asset('js/vendors/jquery/jquery-ui.min.css')}}" rel="stylesheet">
     <link href="{{asset('js/vendors/toastr/toastr.min.css')}}" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
@@ -121,6 +122,7 @@
         </main>
     </div>
     <script src="{{asset('js/vendors/jQuery-3.7.1.js')}}"></script>
+<script src="{{asset('js/vendors/jquery/jquery-ui.min.js')}}"></script>
     <script src="{{asset('js/vendors/jquery.repeater.js')}}"></script>
     <script src="{{asset('js/vendors/toastr/toastr.min.js')}}"></script>
     <script src="{{asset('js/vendors/sweetalert.js')}}"></script>

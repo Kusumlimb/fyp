@@ -1,12 +1,16 @@
 import './bootstrap';
+import "flowbite";
 import Alpine from 'alpinejs';
 import.meta.glob([
     '../images/**'
 ]);
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
+import { Accordion } from 'flowbite';
+
 window.Alpine = Alpine;
 Alpine.start();
 
-// Text Area Auto Size
 $("textarea").each(function () {
     this.style.height = this.scrollHeight + "px";
     this.style.overflowY = "hidden";

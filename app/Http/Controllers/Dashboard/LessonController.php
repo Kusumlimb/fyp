@@ -4,118 +4,108 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Rules\LessonSlugBelongsToCourse;
+use FFMpeg\FFProbe;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class LessonController extends Controller
 {
-    // Display all lessons
-    public function index()
+    public function index(Course $course)
     {
-        $data['activeMenu'] = 'lessons';
-        $data['lessons'] = Lesson::paginate(5); // Pagination for lessons
-        return view('dashboard.lessons.index')->with($data); // Pass lessons to the index view
+        $data['activeMenu'] = 'courses';
+        $data['course'] = $course;
+        $data['lessons'] = Lesson::query()->where('course_id', $course->id)->get();
+        return view('dashboard.lessons.index')->with($data);
     }
 
-    // Show the form to create a new lesson
-    public function create()
+    public function create(Course $course)
     {
-        // Fetch all courses to display in the dropdown
-        $courses = Course::all();
-        $data['activeMenu'] = 'lessons';
-        return view('dashboard.lessons.create', compact('courses'))->with($data);
+         $data['activeMenu'] = 'courses';
+         $data['course'] = $course;
+         $data['lesson'] = new Lesson();
+         return view('dashboard.lessons.create')->with($data);
     }
 
-    // Store a new lesson
-    public function store(Request $request)
+    public function store(Course $course, Request $request)
     {
-        // Validate the incoming request data
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'video' => 'required|mimes:mp4,mov,avi,mkv,flv|max:10000', // Validate video file type and size (10MB max)
-            'course_id' => 'required|exists:courses,id',
+             'title'       => ['required', 'string', 'max:255'],
+             'description' => ['required', 'string'],
+             'video'       => ['required', 'mimes:mp4,mov,avi,mkv,flv', 'max:50000'],
         ]);
-
-        // Handle the video file upload
-        if ($request->hasFile('video')) {
-            $videoPath = $request->file('video')->store('videos', 'public'); // Store the video in the 'videos' folder
-        }
-
-        // Create the lesson using the validated data
-        Lesson::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'video_url' => $videoPath, // Store the video path in the database
-            'course_id' => $validated['course_id'],
+         $maxOrder = Lesson::query()->where('course_id', $course->id)->max('order');
+         $videoPath = $request->file('video')->store("courses/{$course->slug}/lessons", 'public');
+         $ffProbe = FFProbe::create();
+         $videoDuration = $ffProbe->format(public_path("storage/$videoPath"))->get('duration');
+         Lesson::query()->create([
+              'title'       => $validated['title'],
+              'description' => $validated['description'],
+              'course_id'   => $course->id,
+              'order'       => $maxOrder + 1,
+              'video_url'   => $videoPath,
+              'duration'    => round($videoDuration),
         ]);
-
-        return redirect()->route('dashboard.lessons.index')->with('success', 'Lesson created successfully');
+        return redirect()->route('dashboard.courses.lessons.index', $course->slug)->with('toastr.success', 'Lesson created successfully');
     }
 
-    // Show the form to edit a specific lesson
-    public function edit(Lesson $lesson)
+    public function edit(Course $course, Lesson $lesson)
     {
-        // Fetch all courses to populate the course dropdown
-        $courses = Course::all();
-        $data['activeMenu'] = 'lessons';
-        return view('dashboard.lessons.edit', compact('lesson', 'courses'))->with($data);
+        $data['activeMenu'] = 'courses';
+        $data['course'] = $course;
+        $data['lesson'] = $lesson;
+        return view('dashboard.lessons.edit')->with($data);
     }
 
-    // Update an existing lesson
-    public function update(Request $request, Lesson $lesson)
+    public function update(Course $course, Lesson $lesson, Request $request)
     {
-        // Validate the incoming request data, including optional video upload
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'video' => 'nullable|mimes:mp4,mov,avi,mkv,flv|max:10000', // Optional video upload
-            'course_id' => 'required|exists:courses,id',
+             'title'       => ['required', 'string', 'max:255'],
+             'description' => ['required', 'string'],
+             'video'       => ['required_without:video_url_old', 'mimes:mp4,mov,avi,mkv,flv', 'max:50000'],
         ]);
 
-        // Handle file upload if a new video is provided
+         $videoPath = $lesson->video_url;
+         $videoDuration = $lesson->duration;
         if ($request->hasFile('video')) {
-            // Delete the old video if it exists
-            if ($lesson->video_url && file_exists(public_path('storage/'.$lesson->video_url))) {
-                unlink(public_path('storage/'.$lesson->video_url));  // Delete the old video
-            }
-
-            // Store the new video
-            $videoPath = $request->file('video')->store('videos', 'public');
-        } else {
-            // If no new video, keep the old one
-            $videoPath = $lesson->video_url;
+             Storage::disk('public')->delete($lesson->video_url);
+             $videoPath = $request->file('video')->store("courses/{$course->slug}/lessons", 'public');
+             $ffProbe = FFProbe::create();
+             $videoDuration = $ffProbe->format(public_path("storage/$videoPath"))->get('duration');
         }
-
-        // Update the lesson with the new data
         $lesson->update([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'course_id' => $validated['course_id'],
-            'video_url' => $videoPath,  // Store the video path in the database
+             'title'       => $validated['title'],
+             'description' => $validated['description'],
+             'video_url'   => $videoPath,
+             'duration'    => round($videoDuration),
         ]);
 
-        return redirect()->route('dashboard.lessons.index')->with('success', 'Lesson updated successfully');
+        return redirect()->route('dashboard.courses.lessons.index', $course->slug)->with('toastr.success', 'Lesson updated successfully');
     }
 
-    // Delete a specific lesson
-    public function destroy(Lesson $lesson)
+    public function destroy(Course $course, Lesson $lesson)
     {
-        // Ensure the user is authorized to delete this lesson
-        // Uncomment the lines below if you want to enforce ownership checks
-        // if ($lesson->user_id !== auth()->id()) {
-        //     abort(403); // Unauthorized
-        // }
-
-        // Delete the lesson
-        if ($lesson->video_url && file_exists(public_path('storage/'.$lesson->video_url))) {
-            unlink(public_path('storage/'.$lesson->video_url));  // Delete the associated video
-        }
-
+        Storage::disk('public')->delete($lesson->video_url);
         $lesson->delete();
-
-        return redirect()->route('dashboard.lessons.index')->with('success', 'Lesson deleted successfully');
+        return redirect()->route('dashboard.courses.lessons.index', ['course' => $course, 'lesson' => $lesson])->with('toastr.success', 'Lesson deleted successfully');
     }
+
+     public function reorder(Course $course, Request $request)
+     {
+          $request->validate([
+               'sorted_lessons' => ['required', 'array'],
+               'sorted_lessons.*' => [new LessonSlugBelongsToCourse($course)],
+          ]);
+          $sortedLessons = $request->input('sorted_lessons');
+          DB::transaction(function () use ($sortedLessons) {
+               foreach ($sortedLessons as $index => $slug) {
+                    Lesson::query()->where('slug', $slug)->update(['order' => $index + 1]);
+               }
+          });
+          return response()->json(['message' => 'Reordered lessons successfully']);
+
+     }
 }

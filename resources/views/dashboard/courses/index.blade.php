@@ -61,7 +61,9 @@
                                 <a href="{{route('dashboard.courses.edit', $course->slug)}}" class="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 inline-block">Edit<span class="sr-only">{{$course->title}}</span></a>
                                 @if(auth()->user()->isTeacher())
                                 <a href="{{route('dashboard.quiz.create', $course->id)}}" class="rounded-md bg-green-50 px-2.5 py-1.5 text-sm font-semibold text-green-600 shadow-sm hover:bg-green-100 inline-block">Add Quiz<span class="sr-only">{{$course->title}}</span></a>
+                                <a href="{{route('dashboard.courses.lessons.create', $course->slug)}}" class="rounded-md bg-indigo-50 px-2.5 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100 inline-block">Add Lesson<span class="sr-only">{{$course->title}}</span></a>
                                 @endif
+                                <a href="{{route('dashboard.courses.lessons.index', $course->slug)}}" class="rounded-md bg-yellow-50 px-2.5 py-1.5 text-sm font-semibold text-yellow-600 shadow-sm hover:bg-yellow-100 inline-block">Lessons<span class="sr-only">{{$course->title}}</span></a>
                                 <form action="{{ route('dashboard.courses.destroy', $course->slug) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this course?');">
                                      @method('DELETE')
                                      @csrf
