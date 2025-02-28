@@ -22,7 +22,12 @@ $studentRole = Role::STUDENT->value;
 
 Route::get('/', [IndexController::class, 'index'])->name('front.home');
 Route::get('/languages', [IndexController::class, 'courses'] )->name('front.courses');
+Route::get('/blogs', [IndexController::class, 'blogs'] )->name('front.blogs');
+Route::get('/languages', [IndexController::class, 'courses'] )->name('front.courses');
+Route::get('/contact', [IndexController::class, 'contact'] )->name('front.contact');
 Route::get('/languages/{course:slug}', [IndexController::class, 'courseDetail'] )->name('front.courses.course-detail');
+
+
 
 Route::middleware(['auth', "role:$studentRole"])->group(function(){
      Route::post('initiate-payment/{course:slug}', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');

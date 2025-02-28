@@ -8,8 +8,8 @@
         <ul>
             <li><a href="{{route('front.home')}}">Home</a></li>
             <li><a href="{{route('front.courses')}}">Languages</a></li>
-            <li><a href="/about/blog">Blog</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="{{route('front.blogs')}}">Blog</a></li>
+            <li><a href="{{route('front.contact')}}">Contact</a></li>
         </ul>
     </nav>
     <div class="flex justify-center items-center gap-x-2">

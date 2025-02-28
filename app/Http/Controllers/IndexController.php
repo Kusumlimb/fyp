@@ -36,4 +36,13 @@ class IndexController extends Controller
           ]);
      }
 
+     public function blogs(){
+          return view('front.blogs');
+     }
+
+     public function contact()
+     {
+          return view('front.contact');
+     }
+
 }
