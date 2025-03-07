@@ -59,10 +59,3 @@
             </div>
     @endif
 </div>
-@if($lesson->video_url)
-@push('scripts')
-    <script>
-
-    </script>
-@endpush
-@endif
