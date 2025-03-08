@@ -26,7 +26,7 @@
              <ul class="space-y-4">
                  @foreach ($course->lessons as $lesson)
                      <li class="flex  bg-gray-800 rounded-lg">
-                         <a class="flex justify-between p-4 rounded-lg w-full items-center {{$isAlreadyEnrolled ? '' : 'cursor-not-allowed'}}" href="{{$isAlreadyEnrolled ? route('front.courses.lessons.view',['course' => $course->slug, 'lesson' => $lesson->slug]) : "javascript:void(0)" }}">
+                         <a class="flex justify-between p-4 rounded-lg w-full items-center {{$isAlreadyEnrolled || $isCreator ? '' : 'cursor-not-allowed'}}" href="{{$isAlreadyEnrolled || $isCreator ? route('front.courses.lessons.view',['course' => $course->slug, 'lesson' => $lesson->slug]) : "javascript:void(0)" }}">
                             <span class="text-white font-medium">{{ $lesson->title }}</span>
                             <span class="text-gray-400">{{\Carbon\CarbonInterval::seconds( $lesson->duration)->cascade()->forHumans()}}</span>
                          </a>
@@ -37,12 +37,8 @@
                 @guest
                 <a href="{{route('login')}}" class="bg-[#f8b400] text-[#0a3d72] px-5 py-2 rounded-lg text-center font-semibold hover:bg-[#f39c12] transition-all duration-300 shadow-lg transform hover:scale-105">Login to Continue</a>
                 @else
-                    @if(auth()->user()->isStudent())
-                        @if($isAlreadyEnrolled)
-                            <a href="{{route('front.home')}}" class="bg-green-500  px-5 py-2 rounded-lg text-center font-semibold hover:bg-green-600 transition-all duration-300 shadow-lg transform hover:scale-105">Start Learning</a>
-                        @else
-                            <button type="button" class="bg-[#f8b400] text-[#0a3d72] px-5 py-2 rounded-lg text-center font-semibold hover:bg-[#f39c12] transition-all duration-300 shadow-lg transform hover:scale-105" id="khalti-pay-btn">Purchase</button>
-                        @endif
+                    @if(auth()->user()->isStudent() && !$isAlreadyEnrolled)
+                        <button type="button" class="bg-[#f8b400] text-[#0a3d72] px-5 py-2 rounded-lg text-center font-semibold hover:bg-[#f39c12] transition-all duration-300 shadow-lg transform hover:scale-105" id="khalti-pay-btn">Purchase</button>
                     @endif
                 @endif
                 <a href="{{ route('front.courses') }}" class="bg-gray-500 text-white px-5 py-2 rounded-lg text-center font-semibold hover:bg-gray-600 transition-all duration-300 shadow-lg">Back</a>

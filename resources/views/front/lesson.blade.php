@@ -40,7 +40,7 @@
 @push('scripts')
     <script type="module">
         let player = videojs('lesson-video',{
-            // autoplay: true,
+            autoplay: true,
             fluid: true,
             plugins: {
                 hotkeys: {
