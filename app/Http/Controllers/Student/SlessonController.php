@@ -8,15 +8,15 @@ use App\Http\Controllers\Controller;
 
 class SlessonController extends Controller
 {
-    public function index() // Accepting course as a parameter
-    {
-        $courses= Course::with('lessons')->get();
-       
-        return view('student.lessons.index', [
-            'courses' => $courses,
-            'activeMenu'=> 'lessons'
-        ]);
-    }
+    public function index(Course $course) 
+{
+    $quizzes = $course->quizzes; // Get quizzes for the specific course
+    return view('student.quizzes.index', [
+        'quizzes' => $quizzes,
+        'course' => $course // Pass course to the view
+    ]);
+}
+
 
     public function show(Course $course, Lesson $lesson) // Accepting both course and lesson
     {

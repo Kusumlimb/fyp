@@ -1,4 +1,4 @@
-@extends('layouts.dashboard.dashboard1')
+@extends('layouts.front.front')
 
 @section('title', 'Quizes')
 

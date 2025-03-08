@@ -11,10 +11,11 @@ class SquizController extends Controller
 {
     public function index(Course $course)
     {
+        
         $quizzes = $course->quizzes; // Get quizzes for the specific course
         return view('student.quizzes.index', [
             'quizzes' => $quizzes,
-            'courseId' => $course->id, // Pass courseId to the view
+            'course' => $course, // Pass courseId to the view
         ]);
     }
 
