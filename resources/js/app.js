@@ -4,12 +4,15 @@ import Alpine from 'alpinejs';
 import.meta.glob([
     '../images/**'
 ]);
-import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
-import { Accordion } from 'flowbite';
+import videojs from 'video.js';
+import "videojs-hotkeys";
 
+import { Accordion } from 'flowbite';
 window.Alpine = Alpine;
 Alpine.start();
+window.videojs = videojs;
+
 
 $("textarea").each(function () {
     this.style.height = this.scrollHeight + "px";

@@ -14,6 +14,7 @@ use App\Http\Controllers\Student\SlessonController;
 use App\Http\Controllers\Student\SquizController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LessonController as FrontLessonController;
 
 
 $teacherRole = Role::TEACHER->value;
@@ -27,7 +28,9 @@ Route::get('/languages', [IndexController::class, 'courses'] )->name('front.cour
 Route::get('/contact', [IndexController::class, 'contact'] )->name('front.contact');
 Route::get('/languages/{course:slug}', [IndexController::class, 'courseDetail'] )->name('front.courses.course-detail');
 
-
+Route::middleware(['auth'])->group(function(){
+     Route::get('languages/{course:slug}/{lesson:slug}', [FrontLessonController::class, 'show'])->name('front.courses.lessons.view');
+});
 
 Route::middleware(['auth', "role:$studentRole"])->group(function(){
      Route::post('initiate-payment/{course:slug}', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');
@@ -104,6 +107,10 @@ Route::prefix('student/courses/{course}')->group(function () {
 Route::prefix('student/courses/{course}')->group(function () {
     Route::get('/quizzes', [SquizController::class, 'index'])->name('student.quizzes.index');
     Route::get('/quizzes/{quiz}', [SquizController::class, 'show'])->name('student.quizzes.show');
+    Route::post('/quizzes/submit', [SquizController::class, 'submitQuiz'])
+    ->name('student.quizzes.submit');
+
+
 });
 
     

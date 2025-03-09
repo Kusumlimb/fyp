@@ -24,4 +24,12 @@ class Quiz extends Model
      {
           return $this->hasMany(Option::class);
      }
+
+     // public function questions(): HasMany
+     // {
+     //      return $this->hasMany(Question::class);
+     // }
+
+
+
 }

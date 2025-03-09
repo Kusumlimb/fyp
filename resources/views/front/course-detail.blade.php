@@ -25,9 +25,11 @@
             <h3 class="text-lg font-semibold mb-2">Course Content</h3>
              <ul class="space-y-4">
                  @foreach ($course->lessons as $lesson)
-                     <li class="flex justify-between items-center bg-gray-800 p-4 rounded-lg">
-                         <span class="text-white font-medium">{{ $lesson->title }}</span>
-                         <span class="text-gray-400">{{\Carbon\CarbonInterval::seconds( $lesson->duration)->cascade()->forHumans()}}</span>
+                     <li class="flex  bg-gray-800 rounded-lg">
+                         <a class="flex justify-between p-4 rounded-lg w-full items-center {{$isAlreadyEnrolled || $isCreator ? '' : 'cursor-not-allowed'}}" href="{{$isAlreadyEnrolled || $isCreator ? route('front.courses.lessons.view',['course' => $course->slug, 'lesson' => $lesson->slug]) : "javascript:void(0)" }}">
+                            <span class="text-white font-medium">{{ $lesson->title }}</span>
+                            <span class="text-gray-400">{{\Carbon\CarbonInterval::seconds( $lesson->duration)->cascade()->forHumans()}}</span>
+                         </a>
                      </li>
                  @endforeach
              </ul>
