@@ -1,3 +1,3 @@
-@extends('layouts.dashboard.dashboard2')
+@extends('layouts.dashboard.dashboard')
 
 @section('title', 'Admin dashboard')

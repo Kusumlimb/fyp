@@ -21,39 +21,37 @@
         </div>
     @endif
 
-    {{-- Check if the user has already taken the quiz --}}
-    @php
-        $quizTaken = \App\Models\QuizAttempt::where('user_id', auth()->id())->where('course_id', $course->id)->exists();
-    @endphp
+    {{-- View Previous Results Button --}}
+    <div class="text-center mb-6">
+        <a href="{{ route('student.quizzes.results', ['course' => $course->id]) }}" class="px-6 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600">
+            View Previous Results
+        </a>
+    </div>
 
-    @if(!$quizTaken)
-        {{-- Quiz Form --}}
-        <div id="quiz-container">
-            <form id="quiz-form" action="{{ route('student.quizzes.submit', ['course' => $course->id]) }}" method="POST" class="space-y-6">
-                @csrf
-                @foreach ($quizzes as $quiz)
-                    <div class="quiz-question bg-gray-100 p-4 rounded-lg shadow-md" data-quiz-id="{{ $quiz->id }}">
-                        <h2 class="text-xl font-semibold text-gray-700">{{ $quiz->title }}</h2>
-                        
-                        @foreach ($quiz->options as $option)
-                            <label class="flex items-center space-x-3 mt-2">
-                                <input type="radio" name="answers[{{ $quiz->id }}]" value="{{ $option->id }}" class="quiz-option w-5 h-5 text-blue-500">
-                                <span class="text-gray-700">{{ $option->option_text }}</span>
-                            </label>
-                        @endforeach
-                    </div>
-                @endforeach
-
-                <div class="flex justify-between mt-6">
-                    <button id="submit-button" type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                        Submit Quiz
-                    </button>
+    {{-- Quiz Form --}}
+    <div id="quiz-container">
+        <form id="quiz-form" action="{{ route('student.quizzes.submit', ['course' => $course->id]) }}" method="POST" class="space-y-6">
+            @csrf
+            @foreach ($quizzes as $quiz)
+                <div class="quiz-question bg-gray-100 p-4 rounded-lg shadow-md" data-quiz-id="{{ $quiz->id }}">
+                    <h2 class="text-xl font-semibold text-gray-700">{{ $quiz->title }}</h2>
+                    
+                    @foreach ($quiz->options as $option)
+                        <label class="flex items-center space-x-3 mt-2">
+                            <input type="radio" name="answers[{{ $quiz->id }}]" value="{{ $option->id }}" class="quiz-option w-5 h-5 text-blue-500">
+                            <span class="text-gray-700">{{ $option->option_text }}</span>
+                        </label>
+                    @endforeach
                 </div>
-            </form>
-        </div>
-    @else
-        <p class="text-center text-gray-600">You have already completed this quiz.</p>
-    @endif
+            @endforeach
+
+            <div class="flex justify-between mt-6">
+                <button id="submit-button" type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Submit Quiz
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>

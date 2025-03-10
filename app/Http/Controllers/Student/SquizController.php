@@ -37,45 +37,46 @@ class SquizController extends Controller
     public function submitQuiz(Request $request, Course $course)
 {
     $user = Auth::user();
-
-
-    // Check if user has already taken the quiz
-    if (QuizAttempt::where('user_id', $user->id)->where('course_id', $course->id)->exists()) {
-        return redirect()->route('student.quizzes.index', ['course' => $course->id])
-            ->with('error', 'You have already taken this quiz.');
-    }
-
+    
     $answers = $request->input('answers', []);
     $quizzes = Quiz::where('course_id', $course->id)->get();
     
     $correctAnswers = 0;
     $totalQuestions = $quizzes->count();
 
-    // Store quiz attempt
-    $quizAttempt = QuizAttempt::create([
-        'user_id' => $user->id,
-        'course_id' => $course->id
-    ]);
-
-    // Store each answer
+    // Calculate the score
     foreach ($quizzes as $quiz) {
         $selectedOptionId = $answers[$quiz->id] ?? null;
         $correctOption = $quiz->options()->where('is_correct', true)->first();
 
-        if ($selectedOptionId && $selectedOptionId == $correctOption->id) {
+        if ($selectedOptionId && $correctOption && $selectedOptionId == $correctOption->id) {
             $correctAnswers++;
         }
-
-        QuizAttemptAnswer::create([
-            'quiz_attempt_id' => $quizAttempt->id,
-            'quiz_id' => $quiz->id,
-            'selected_option_id' => $selectedOptionId
-        ]);
     }
 
+    $score = $totalQuestions > 0 ? round(($correctAnswers / $totalQuestions) * 100) : 0;
+
+    // Store the quiz attempt
+    QuizAttempt::create([
+        'user_id' => $user->id,
+        'course_id' => $course->id,
+        'score' => $score,
+        'total_questions' => $totalQuestions,
+    ]);
+
     return redirect()->route('student.quizzes.index', ['course' => $course->id])
-        ->with('success', "You got $correctAnswers out of $totalQuestions correct!");
+        ->with('success', "You scored $score%");
 }
+
+
+public function quizResults(Course $course)
+{
+    $user = Auth::user();
+    $attempts = QuizAttempt::where('user_id', $user->id)->where('course_id', $course->id)->orderBy('created_at', 'desc')->get();
+
+    return view('student.quizzes.results', compact('attempts', 'course'));
+}
+
 
 
 

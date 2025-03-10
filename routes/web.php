@@ -106,9 +106,12 @@ Route::prefix('student/courses/{course}')->group(function () {
 // Grouping routes under 'student/courses/{course}' prefix for Quizzes
 Route::prefix('student/courses/{course}')->group(function () {
     Route::get('/quizzes', [SquizController::class, 'index'])->name('student.quizzes.index');
+    Route::get('/quizzes/results', [SquizController::class, 'quizResults'])->name('student.quizzes.results');
     Route::get('/quizzes/{quiz}', [SquizController::class, 'show'])->name('student.quizzes.show');
     Route::post('/quizzes/submit', [SquizController::class, 'submitQuiz'])
     ->name('student.quizzes.submit');
+    
+
 
 
 });
