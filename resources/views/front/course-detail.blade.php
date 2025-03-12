@@ -51,6 +51,9 @@
                         @endif
                     @endif
                 @endif
+                <a href="{{ route('chat') }}" class="bg-blue-500 text-white px-5 py-2 rounded-lg text-center font-semibold hover:bg-blue-600 transition-all duration-300 shadow-lg transform hover:scale-105">
+        Chat 💬
+    </a>
                 <a href="{{ route('front.courses') }}" class="bg-gray-500 text-white px-5 py-2 rounded-lg text-center font-semibold hover:bg-gray-600 transition-all duration-300 shadow-lg">Back</a>
             </div>
         </div>

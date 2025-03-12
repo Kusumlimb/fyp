@@ -19,6 +19,8 @@
     },
     "dependencies": {
         "flowbite": "^3.1.2",
+        "laravel-echo": "^2.0.2",
+        "pusher-js": "^8.4.0",
         "videojs-hotkeys": "^0.2.30"
     }
 }

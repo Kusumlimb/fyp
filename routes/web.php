@@ -13,6 +13,7 @@ use App\Http\Controllers\Student\ScourseController;
 use App\Http\Controllers\Student\SlessonController;
 use App\Http\Controllers\Student\SquizController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LessonController as FrontLessonController;
 
@@ -136,4 +137,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware('auth')->group(function () {
+     Route::get('/chat/messages', [ChatController::class, 'fetchMessages']);
+     Route::post('/chat/messages', [ChatController::class, 'sendMessage']);
+ });
 require __DIR__.'/auth.php';
