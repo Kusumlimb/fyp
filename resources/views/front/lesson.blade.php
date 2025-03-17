@@ -36,13 +36,15 @@
         </p>
 
         {{-- Comment Section --}}
-<div class="mt-8 bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+        <div class="mt-8 bg-white p-6 rounded-lg shadow-lg border border-gray-200 min-h-[400px]">
+
     <h3 class="text-xl font-semibold text-gray-800 mb-4">Comments</h3>
 
     {{-- Display Comments First --}}
     <div class="mb-6 space-y-4">
         @forelse($lesson->comments as $comment)
-            <div class="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50">
+        <div class="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50 min-h-[150px]">
+
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-3">
                         <span class="font-semibold text-gray-700">
@@ -55,7 +57,7 @@
                     @if(auth()->id() === $comment->user_id)
                         <div class="flex space-x-2">
                             {{-- Edit Button --}}
-                            <button onclick="editComment({{ $comment->id }})" class="text-blue-600 hover:underline text-sm">Edit</button>
+                            <button onclick="editComment('{{ $comment->id }}')" class="text-blue-600 hover:underline text-sm">Edit</button>
 
                             {{-- Delete Button --}}
                             <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="inline">
@@ -70,21 +72,25 @@
                 {{-- Comment Content --}}
                 <p class="mt-2 text-gray-800" id="comment-content-{{ $comment->id }}">{{ $comment->content }}</p>
 
-                {{-- Edit Comment Form (Hidden by Default) --}}
-                <form id="edit-form-{{ $comment->id }}" action="{{ route('comments.update', $comment->id) }}" method="POST" class="hidden mt-3">
-                    @csrf
-                    @method('PUT')
-                    <textarea name="comment" class="w-full p-2 border rounded" required>{{ $comment->content }}</textarea>
-                    <button type="submit" class="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Save</button>
-                    <button type="button" onclick="cancelEdit({{ $comment->id }})" class="ml-2 px-3 py-1 bg-gray-400 text-white rounded">Cancel</button>
-                </form>
+                {{-- Edit Comment Form --}}
+                <form id="edit-form-{{ $comment->id }}" action="{{ route('comments.update', $comment->id) }}" method="POST" class="hidden mt-3 w-full">
+
+    @csrf
+    @method('PUT')
+    <textarea name="comment" class="w-full p-2 border rounded h-24 resize-none" required>{{ $comment->content }}</textarea>
+
+    <button type="submit" class="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Save</button>
+    <button type="button" onclick="cancelEdit('{{ $comment->id }}')" class="ml-2 px-3 py-1 bg-gray-400 text-white rounded">Cancel</button>
+
+</form>
+
             </div>
         @empty
             <p class="text-gray-500">No comments yet. Be the first to comment!</p>
         @endforelse
     </div>
 
-    {{-- Move Comment Form Below --}}
+   
     @auth
         <form method="POST" action="{{ route('comments.store', $lesson->id) }}">
             @csrf
