@@ -9,9 +9,26 @@ class IndexController extends Controller
 {
 
      public function index()
-     {
-          return view('front.index');
-     }
+{
+    $recommendedCourses = [];
+
+    if (auth()->check()) {
+        $user = auth()->user();
+
+        // Get instructor user_ids from enrolled courses
+        $instructorIds = $user->enrolledCourses->pluck('user_id')->unique();
+
+        $recommendedCourses = Course::where('status', Status::ACTIVE->value)
+            ->whereIn('user_id', $instructorIds)
+            ->whereNotIn('id', $user->enrolledCourses->pluck('id')) // skip already enrolled ones
+            ->limit(5)
+            ->get();
+    }
+
+    return view('front.index', compact('recommendedCourses'));
+}
+
+
 
      public function courses()
      {

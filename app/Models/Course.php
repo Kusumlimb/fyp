@@ -55,4 +55,6 @@ class Course extends Model
                ->doNotGenerateSlugsOnUpdate();
      }
 
+   
+
 }
