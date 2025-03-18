@@ -40,7 +40,7 @@
 
     <h3 class="text-xl font-semibold text-gray-800 mb-4">Comments</h3>
 
-    {{-- Display Comments First --}}
+    {{-- Display Comments  --}}
     <div class="mb-6 space-y-4">
         @forelse($lesson->comments as $comment)
         <div class="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50 min-h-[150px]">
@@ -77,7 +77,8 @@
 
     @csrf
     @method('PUT')
-    <textarea name="comment" class="w-full p-2 border rounded h-24 resize-none" required>{{ $comment->content }}</textarea>
+    <textarea name="comment" class="w-full p-2 border rounded h-24 resize-none bg-white text-black" required>{{ $comment->content }}</textarea>
+
 
     <button type="submit" class="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Save</button>
     <button type="button" onclick="cancelEdit('{{ $comment->id }}')" class="ml-2 px-3 py-1 bg-gray-400 text-white rounded">Cancel</button>

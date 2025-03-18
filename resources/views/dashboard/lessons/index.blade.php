@@ -59,45 +59,7 @@
                                                  </p>
                                              </video>
                                          </div>
-                                         <!-- Comments Section -->
-            <tr>
-                <td colspan="3" class="p-4">
-                    <div class="bg-white p-4 rounded-lg shadow">
-                        <h3 class="text-lg font-semibold mb-3">Student Comments</h3>
-
-                        <!-- Display Comments -->
-                        @forelse($lesson->comments as $comment)
-                            <div class="p-3 border-b border-gray-200">
-                                <p class="text-gray-800">
-                                    <strong>{{ $comment->user->name }}</strong>: {{ $comment->content }}
-                                </p>
-
-                                <!-- Reply Button for Teachers -->
-                                @if(auth()->user()->role === 'teacher')
-                                    <button onclick="toggleReplyForm('{{ $comment->id }}')" class="text-blue-600 text-sm hover:underline">Reply</button>
-                                    
-                                    <!-- Reply Form -->
-                                    <form id="reply-form-{{ $comment->id }}" action="{{ route('comments.store', $lesson->id) }}" method="POST" class="hidden mt-2">
-                                        @csrf
-                                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                                        <textarea name="comment" class="w-full p-2 border rounded h-16 resize-none" required></textarea>
-                                        <button type="submit" class="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Reply</button>
-                                    </form>
-                                @endif
-
-                                <!-- Display Replies -->
-                                @foreach($comment->replies as $reply)
-                                    <div class="ml-6 p-2 border-l-2 border-blue-400 text-gray-700">
-                                        <strong>{{ $reply->user->name }}</strong>: {{ $reply->content }}
-                                    </div>
-                                @endforeach
-                            </div>
-                        @empty
-                            <p class="text-gray-500">No comments yet.</p>
-                        @endforelse
-                    </div>
-                </td>
-            </tr>
+                                        
 
                                      </div>
                                  </div>
@@ -165,4 +127,5 @@
 
         })
     </script>
+    
 @endpush
