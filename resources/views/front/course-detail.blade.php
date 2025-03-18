@@ -40,9 +40,9 @@
                     @if(auth()->user()->isStudent())
                         @if($isAlreadyEnrolled)
                             <a href="{{route('front.home')}}" class="bg-green-500  px-5 py-2 rounded-lg text-center font-semibold hover:bg-green-600 transition-all duration-300 shadow-lg transform hover:scale-105">Start Learning</a>
-                            <a href="{{ route('student.quizzes.index', ['course' => $course->id]) }}" 
-   class="bg-green-500 px-5 py-2 rounded-lg text-center font-semibold hover:bg-green-600 transition-all duration-300 shadow-lg transform hover:scale-105">
-   Take quiz
+                            <a href="{{ route('student.quizzes.index', ['course' => $course->id]) }}" class="bg-green-500 px-5 py-2 rounded-lg text-center font-semibold hover:bg-green-600 transition-all duration-300 shadow-lg transform hover:scale-105"> Take quiz</a>
+                            <a href="{{route('student.courses.progress', ['course' => $course->id])}}" id="progress-tracker-btn" class="bg-blue-500 px-5 py-2 rounded-lg text-center font-semibold hover:bg-blue-600 transition-all duration-300 shadow-lg transform hover:scale-105">
+    Progress Tracker
 </a>
 
 

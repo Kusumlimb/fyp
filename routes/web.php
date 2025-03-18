@@ -95,6 +95,8 @@ Route::middleware(['auth', 'verified', 'role:student'])->group(function () {
 
     Route::get('/student/courses', [ScourseController::class, 'index'])->name('student.courses.index');
     Route::get('/student/courses/{course}', [ScourseController::class, 'show'])->name('student.courses.show');
+    Route::get('/student/courses/{course}/progress', [ScourseController::class, 'showProgress'])->name('student.courses.progress');
+
 
 
     // Grouping routes under 'student/courses/{course}' prefix for Lessons

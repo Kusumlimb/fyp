@@ -25,4 +25,21 @@ class ScourseController extends Controller
         return view('student.courses.show', compact('course', 'lessons', 'quizzes'));
     }
     
+    public function showProgress(Course $course)
+{
+    $user = auth()->user();
+
+    $isAlreadyEnrolled = $course->students()->where('user_id', $user->id)->exists();
+    $isCreator = $course->instructor_id === $user->id;
+
+    if (! $isAlreadyEnrolled && ! $isCreator) {
+        abort(403, 'Unauthorized');
+    }
+
+  
+    return view('student.courses.progress', [
+        'course' => $course,
+    ]);
+}
+
 }
