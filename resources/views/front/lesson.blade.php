@@ -50,7 +50,10 @@
                         <span class="font-semibold text-gray-700">
                             {{ $comment->user ? $comment->user->name : 'Deleted User' }}
                         </span>
-                        <span class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                        @if($comment->created_at != $comment->updated_at)
+                            <span class="text-sm text-blue-400">edited</span>
+                        @endif
+
                     </div>
 
                     {{-- Show Edit & Delete options for the comment owner --}}
