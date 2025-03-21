@@ -23,11 +23,34 @@
             <p class="mb-5 text-gray-300">👨‍🎓 {{ $course->students_count }} students enrolled</p>
 
             <h3 class="text-lg font-semibold mb-2">Course Content</h3>
-             <ul class="space-y-4">
+             <ul class="space-y-4 lesson-listing">
                  @foreach ($course->lessons as $lesson)
-                     <li class="flex  bg-gray-800 rounded-lg">
-                         <a class="flex justify-between p-4 rounded-lg w-full items-center {{$isAlreadyEnrolled || $isCreator ? '' : 'cursor-not-allowed'}}" href="{{$isAlreadyEnrolled || $isCreator ? route('front.courses.lessons.view',['course' => $course->slug, 'lesson' => $lesson->slug]) : "javascript:void(0)" }}">
-                            <span class="text-white font-medium">{{ $lesson->title }}</span>
+                     <?php
+                      $lessonAlreadyCompleted = in_array($lesson->slug, $completedLessons);
+                    ?>
+                     <li class="flex  bg-gray-800 rounded-lg relative">
+                         <a class="lesson-link flex justify-between p-4 rounded-lg w-full items-center {{$isAlreadyEnrolled || $isCreator ? '' : 'cursor-not-allowed'}}"
+                            data-slug="{{ $lesson->slug }}"
+                            data-duration="{{$lesson->duration}}"
+                            href="{{$isAlreadyEnrolled || $isCreator ? route('front.courses.lessons.view',['course' => $course->slug, 'lesson' => $lesson->slug]) : "javascript:void(0)" }}">
+                            <span class="flex items-center gap-2">
+                                <div class="progress-container">
+                                    <svg width="40" height="40" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="40" stroke="#ddd" stroke-width="10" fill="none"></circle>
+                                        <circle cx="50" cy="50" r="40" stroke="#f8b400" stroke-width="10" fill="none"
+                                            stroke-dasharray="{{ 2 * (22/7) * 40}}"
+                                            stroke-dashoffset="0"
+                                            stroke-linecap="round"
+                                            class="progress-circle"
+                                            @if(!$lessonAlreadyCompleted)
+                                            data-progress="{{ $lesson->slug }}"
+                                            @endif>
+                                        </circle>
+                                        <text x="50" y="55" font-size="20" text-anchor="middle" fill="#fff" @if(!$lessonAlreadyCompleted) class="progress-text" @endif data-text="{{ $lesson->slug }}">{{$lessonAlreadyCompleted ? '100%' : '0%'}}</text>
+                                    </svg>
+                                </div>
+                                <span class="text-white font-medium">{{ ucwords($lesson->title) }}</span>
+                             </span>
                             <span class="text-gray-400">{{\Carbon\CarbonInterval::seconds( $lesson->duration)->cascade()->forHumans()}}</span>
                          </a>
                      </li>
@@ -59,6 +82,9 @@
 @push('scripts')
    <script>
        $(document).ready(function (){
+           const COURSE_SLUG = '{{$course->slug}}';
+           const CURRENT_USER_ID = '{{auth()->user()->id}}';
+
            $(document).on('click', '#khalti-pay-btn', function (){
                $.ajax({
                    url: "{{route('payment.initiate', $course->slug)}}",
@@ -85,6 +111,28 @@
                    }
                });
            });
+
+           function updateLessonProgress() {
+               document.querySelectorAll('.lesson-listing a.lesson-link').forEach(lessonLink => {
+                   const lessonSlug = lessonLink.dataset.slug;
+                   const totalDuration = parseFloat(lessonLink.dataset.duration) || 1;
+                   const STORAGE_KEY = `video_progress_${CURRENT_USER_ID}_${COURSE_SLUG}_${lessonSlug}`;
+                   const savedTime = parseFloat(localStorage.getItem(STORAGE_KEY)) || 0;
+
+                   const progressPercentage = Math.min((savedTime / totalDuration) * 100, 100);
+                   const progressCircle = document.querySelector(`.progress-circle[data-progress="${lessonSlug}"]`);
+                   if (progressCircle) {
+                       const totalLength = 2 * (22/7) * 40 // Circle circumference
+                       progressCircle.style.strokeDashoffset = (totalLength - (totalLength * progressPercentage) / 100).toString();
+                   }
+                   const progressText = document.querySelector(`.progress-text[data-text="${lessonSlug}"]`);
+                   if (progressText) {
+                       progressText.textContent = `${Math.round(progressPercentage)}%`;
+                   }
+               });
+           }
+           updateLessonProgress();
+
 
        })
    </script>

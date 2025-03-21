@@ -16,8 +16,18 @@ class LessonController extends Controller
           if(auth()->user()->isTeacher() && !auth()->user()->createdCourses->contains($course->id)){
                abort(403);
           }
-          $course->load(['lessons:course_id,slug,title']);
+          $course->load(['lessons:course_id,slug,title,duration']);
           return view('front.lesson')->with(['course' => $course, 'lesson' => $lesson]);
+     }
+
+
+     public function markComplete(Course $course, Lesson $lesson)
+     {
+          if(!auth()->user()->enrolledCourses->contains($course->id)){
+               abort(403);
+          }
+          auth()->user()->competedLessons()->syncWithoutDetaching($lesson->id);
+          return response()->json(['message' => 'Success']);
      }
 
 }

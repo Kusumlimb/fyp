@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function(){
 Route::middleware(['auth', "role:$studentRole"])->group(function(){
      Route::post('initiate-payment/{course:slug}', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');
      Route::get('payment-confirmation', [PaymentController::class, 'verifyPayment'])->name('payment.verify-payment');
+     Route::put('languages/{course:slug}/{lesson:slug}/mark-complete', [FrontLessonController::class, 'markComplete'])->name('front.courses.mark-complete');
 });
 
 Route::middleware(['auth', "role:$adminRole"])->group(function(){

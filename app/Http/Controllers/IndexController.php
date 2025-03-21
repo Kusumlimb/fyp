@@ -48,10 +48,12 @@ class IndexController extends Controller
           $course->load(['instructor', 'lessons'])->loadCount('students');
           $isAlreadyEnrolled = auth()->user()?->enrolledCourses->contains($course->id);
           $isCreator = auth()->user()?->createdCourses->contains($course->id);
+          $completedLessons = auth()->user()->isStudent() ? auth()->user()->competedLessons->pluck('slug')->toArray() : [];
           return view('front.course-detail')->with([
                'course' => $course,
                'isCreator' => $isCreator,
-               'isAlreadyEnrolled' => $isAlreadyEnrolled
+               'isAlreadyEnrolled' => $isAlreadyEnrolled,
+               'completedLessons' => $completedLessons
           ]);
      }
 
