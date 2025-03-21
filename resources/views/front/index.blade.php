@@ -50,7 +50,8 @@
             🌍 Recommended Languages
         </h4>
         <ul style="list-style: none; padding: 0; margin: 0;">
-            @foreach($recommendedCourses as $course)
+        @foreach($recommendedCourses->take(3) as $course)
+
                 <li style="margin-bottom: 10px;">
                     <a href="{{ route('front.courses.course-detail', $course->slug) }}"
                        style="display: block; padding: 10px; background-color: #f39c12; border-radius: 8px; text-decoration: none; color: #ffffff; transition: all 0.2s ease-in-out;"
