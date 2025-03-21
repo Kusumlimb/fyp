@@ -14,6 +14,7 @@ use App\Http\Controllers\Student\SlessonController;
 use App\Http\Controllers\Student\SquizController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LessonController as FrontLessonController;
 
@@ -145,6 +146,6 @@ Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('c
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 
-
+Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
 require __DIR__.'/auth.php';

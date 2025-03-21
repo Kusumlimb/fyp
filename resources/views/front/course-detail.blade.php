@@ -38,7 +38,8 @@
                                     <svg width="40" height="40" viewBox="0 0 100 100">
                                         <circle cx="50" cy="50" r="40" stroke="#ddd" stroke-width="10" fill="none"></circle>
                                         <circle cx="50" cy="50" r="40" stroke="#f8b400" stroke-width="10" fill="none"
-                                            stroke-dasharray="{{ 2 * (22/7) * 40}}"
+                                            stroke-dasharray="{{ \Illuminate\Support\Facades\Auth::check() ? 2 * (22/7) * 40 : 0 }}"
+                                    
                                             stroke-dashoffset="0"
                                             stroke-linecap="round"
                                             class="progress-circle"
@@ -79,7 +80,10 @@
         </div>
     </div>
 @endsection
+
+@auth
 @push('scripts')
+
    <script>
        $(document).ready(function (){
            const COURSE_SLUG = '{{$course->slug}}';
@@ -137,4 +141,4 @@
        })
    </script>
 @endpush
-
+@endauth

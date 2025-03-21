@@ -3,37 +3,68 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
 
 class CustomPasswordResetController extends Controller
 {
+    // Show the "forgot password" form
     public function create()
     {
-        return view('auth.forgot-password'); // Use Laravel's default "forgot-password" view
+        return view('auth.forgot-password'); // Your blade view: resources/views/auth/forgot-password.blade.php
     }
 
+    // Handle sending the reset link email
     public function store(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
 
-        // Check if the email exists in the database
-        $user = \App\Models\User::where('email', $request->input('email'))->first();
+        // Send the password reset link
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
 
-        if (!$user) {
-            return back()->with('status', 'If the email exists, a reset link has been sent!');
-        }
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with('status', __($status))
+            : back()->withErrors(['email' => __($status)]);
+    }
 
-        // Generate a secure reset link (using base64 encoding for simplicity here, you can use Laravel's Password facade)
-        $email = $request->input('email');
-        $resetLink = url('/reset-password/' . base64_encode($email)); // Modify this URL based on your routing
+    // Show the reset password form with token
+    public function showResetForm(Request $request, $token)
+    {
+        return view('auth.reset-password', [
+            'token' => $token,
+            'email' => $request->query('email'),
+        ]);
+    }
 
-        // Send the reset link via Mail::raw
-        Mail::raw("Click the link to reset your password: $resetLink", function ($message) use ($email) {
-            $message->to($email)
-                    ->subject('Password Reset Link');
-        });
+    // Handle actual password reset
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|confirmed|min:8',
+        ]);
 
-        return back()->with('status', 'Password reset link sent to your email!');
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
     }
 }
