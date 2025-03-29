@@ -37,17 +37,18 @@ class SquizController extends Controller
     public function submitQuiz(Request $request, Course $course)
 {
     $user = Auth::user();
-    
     $answers = $request->input('answers', []);
-    $quizzes = Quiz::where('course_id', $course->id)->get();
+
     
+    $quizzes = Quiz::where('course_id', $course->id)->with('options')->get();
+
     $correctAnswers = 0;
     $totalQuestions = $quizzes->count();
 
-    // Calculate the score
     foreach ($quizzes as $quiz) {
         $selectedOptionId = $answers[$quiz->id] ?? null;
-        $correctOption = $quiz->options()->where('is_correct', true)->first();
+
+        $correctOption = $quiz->options->where('is_correct', true)->first();
 
         if ($selectedOptionId && $correctOption && $selectedOptionId == $correctOption->id) {
             $correctAnswers++;
@@ -56,7 +57,6 @@ class SquizController extends Controller
 
     $score = $totalQuestions > 0 ? round(($correctAnswers / $totalQuestions) * 100) : 0;
 
-    // Store the quiz attempt
     QuizAttempt::create([
         'user_id' => $user->id,
         'course_id' => $course->id,

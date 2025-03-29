@@ -25,7 +25,7 @@
                         <tr class="border border-gray-300">
                             <td class="py-2 px-4 border border-gray-300 text-center">{{ $index + 1 }}</td>
                             <td class="py-2 px-4 border border-gray-300 text-center">{{ $attempt->score }}%</td>
-                            <td class="py-2 px-4 border border-gray-300 text-center">{{ $attempt->created_at->format('d M Y, H:i') }}</td>
+                            <td class="py-2 px-4 border border-gray-300 text-center">{{ $attempt->created_at->format('d M Y') }}</td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -31,7 +31,8 @@ class LessonController extends Controller
     }
 
     public function store(Course $course, Request $request)
-    {
+    { 
+     
         $validated = $request->validate([
              'title'       => ['required', 'string', 'max:255'],
              'description' => ['required', 'string'],

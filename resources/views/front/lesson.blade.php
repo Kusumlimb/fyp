@@ -94,7 +94,8 @@
                                 @csrf
                                 @method('PUT')
                                 <textarea name="comment"
-                                          class="w-full p-2 border rounded h-24 resize-none bg-white text-black"
+                                          class="w-full p-2 border rounded h-24 resize-none bg-white text-black" 
+                                          rows="4"
                                           required>{{ $comment->content }}</textarea>
 
 
@@ -117,7 +118,7 @@
                     <form method="POST" action="{{ route('comments.store', $lesson->id) }}">
                         @csrf
                         <textarea name="comment"
-                                  class="w-full p-3 border border-gray-300 rounded-lg text-gray-800 bg-white" rows="4"
+                                  class="w-full p-3 border border-gray-300 rounded-lg text-gray-800 bg-white" 
                                   placeholder="Write a comment..." required></textarea>
                         <button type="submit"
                                 class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
