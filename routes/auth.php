@@ -62,4 +62,9 @@ Route::middleware('auth')->group(function () {
     // Logout Route
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+        // Route::get('/dashboard', function () {
+        //     return view('dashboard'); // or any other view you want to show
+        // })->middleware(['auth', 'verified'])->name('dashboard');
+        
 });

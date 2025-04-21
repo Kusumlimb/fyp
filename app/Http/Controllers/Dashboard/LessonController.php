@@ -36,7 +36,7 @@ class LessonController extends Controller
         $validated = $request->validate([
              'title'       => ['required', 'string', 'max:255'],
              'description' => ['required', 'string'],
-             'video'       => ['required', 'mimes:mp4,mov,avi,mkv,flv', 'max:50000'],
+             'video'       => ['required', 'mimes:mp4,mov,avi,mkv,flv', 'max:1000000'],
         ]);
          $maxOrder = Lesson::query()->where('course_id', $course->id)->max('order');
          $videoPath = $request->file('video')->store("courses/{$course->slug}/lessons", 'public');

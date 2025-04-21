@@ -7,7 +7,7 @@
     <div class="container mx-auto p-6 flex flex-col md:flex-row">
         <div class="p-6 bg-black bg-opacity-70 text-white flex-1">
             <h2 class="text-3xl font-bold">Contact Us</h2>
-            <p class="mt-2 text-gray-300">Hello this is the contact page of 'The language learning platform'. 
+            <p class="mt-2 text-gray-300">Hello, This is the contact page of 'TalkTrek'. 
                 Please feel free to ask us anything.</p>
             <p class="mt-4"><strong>Address:</strong> Pathari Shanischare-2, Morang</p>
             <p class="mt-2"><strong>Phone:</strong> 561-456-2321</p>
